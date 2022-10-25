@@ -1,0 +1,27 @@
+.heading{
+  text-align:center;
+  margin-bottom: 5%;
+}
+
+
+.container{
+  display: grid;
+  margin-left:5%;
+  grid-template-columns: repeat(4, 25%);
+  align-content: center;
+  width: 90vw ;
+}
+
+.product{
+  inline-size: 250px;
+
+  margin-bottom: 4%;
+  background-color: rgb(231, 249, 249);
+  border-radius: 15px;
+  text-align: center;
+}
+
+.filter{
+  margin-bottom: 20px;
+  margin-left: 5%;
+}
