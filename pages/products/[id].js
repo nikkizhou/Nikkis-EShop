@@ -4,11 +4,20 @@ import { useRouter } from 'next/router'
 import products from '../../data/data.json'
 import styles from '../../styles/Product.module.css'
 
+<<<<<<< Updated upstream
 function Product() {
   const router = useRouter()
   const {id} = router.query
   const product = products.find(pro => pro.id == id)
   
+=======
+function Product({ product }) {
+  const dispatch = useDispatch();
+  // const router = useRouter()
+  // const {id} = router.query
+  // const product = products.find(pro => pro.id == id)
+  ////
+>>>>>>> Stashed changes
   return (
     <div className={styles.product}>
       <h2>{product.title}</h2>
