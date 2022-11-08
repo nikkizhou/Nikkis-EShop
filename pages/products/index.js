@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image';
 import styles from '../../styles/ProductList.module.css'
 import CategoryFilter from '../../components/CategoryFilter'
+import Navbar from '../../components/Navbar';
 
 function ProductList({products}) {
   const [selectedCategory, setSelectedCategory] = useState();
@@ -11,6 +12,7 @@ function ProductList({products}) {
 
   return (
     <div>
+      <Navbar />
       <h1 className={styles.heading}>Our products:</h1>
       <CategoryFilter products={products} updateCategory={updateCategory} />
       <div className={styles.container}>
