@@ -7,9 +7,9 @@ const Navbar = () => {
       <h6 className={styles.logo}>Nikki's Eshop</h6>
       <ul className={styles.links}>
         <li className={styles.navlink}> <Link href="/">Home</Link> </li>
-        <li className={styles.navlink}> <Link href="/shop">Favorite</Link></li>
+        <li className={styles.navlink}> <Link href="/favorite">Favorite</Link></li>
         <li className={styles.navlink}> <Link href="/cart">Cart</Link></li>
-        <li className={styles.navlink}> <Link href="/cart">Contact</Link></li>
+        <li className={styles.navlink}> <Link href="/contact">Contact</Link></li>
       </ul>
     </nav>
   );

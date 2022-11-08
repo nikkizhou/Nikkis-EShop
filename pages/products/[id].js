@@ -1,8 +1,11 @@
 import React from 'react'
 import Image from 'next/image';
 import styles from '../../styles/Product.module.css'
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../cart_redux/cart.slice';
 
-function Product({product}) {
+function Product({ product }) {
+  const dispatch = useDispatch();
   // const router = useRouter()
   // const {id} = router.query
   // const product = products.find(pro => pro.id == id)
@@ -11,14 +14,18 @@ function Product({product}) {
     <div className={styles.product}>
       <h2>{product.title}</h2>
       <Image
-        src='https://picsum.photos/400/400'
+        src={product.image}
         alt={product.title} width={300} height={300}
         className={product.image}
       ></Image>
-      <p>{product.price}kr/stk</p>
-      <p>category: {product.category }</p>
-      <p>{product.description }</p>
+      <p><span className={styles.price}>{product.price}kr/stk</span>  Category: {product.category} </p>
+      <button className={styles.button} onClick={() => {
+        dispatch(addToCart(pro))
+        alert('The product is added to cart!')
+      }}>Add to Cart</button>
+      <p>{product.description}</p>
     </div>
+
   )
 }
 
