@@ -6,7 +6,8 @@ import styles from '../styles/ProductList.module.css'
 function categoryFilter({ products, updateCategory }) {
   const [selected, setSelected] = useState();
   let categories = new Set(products.map(pro => pro.category))
-  categories = Array.from(categories);
+  categories = Array.from(categories)
+  categories.unshift('All')
 
   return (
     <Dropdown
