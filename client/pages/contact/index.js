@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import styles from '../../styles/Contact.module.css'
+import CusAlert from "../../components/CusAlert";
 
 const ContactForm = () => {
   const [status, setStatus] = useState("Submit");
+  const [alertStatus, setAlertStatus] = useState();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("Sending...");
@@ -21,16 +24,19 @@ const ContactForm = () => {
     });
     setStatus("Submit");
     let result = await response.json();
-    alert(result.status);
+    setAlertStatus(result.status);
   };
+  
   return (
+    <>
+      {alertStatus && <CusAlert status={alertStatus} />}
     <form className={styles.form} onSubmit={handleSubmit}>
       <input className={styles.input} type="text" id="name" placeholder="Name"  required />
       <input className={styles.input} type="email" id="email" placeholder="Email" required />
       <textarea className={styles.comment} id="message" placeholder="Comment"  required />
-     
       <button className={styles.submit} type="submit">{status}</button>
-    </form>
+      </form>
+    </>
   );
 };
 

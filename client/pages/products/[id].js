@@ -22,7 +22,6 @@ function Product({product}) {
       <p><span className={styles.price}>{product.price}kr/stk</span>  Category: {product.category} </p>
       <button className={styles.button} onClick={() => {
         dispatch(addToCart(product))
-        alert('The product is added to cart!')
       }}>Add to Cart</button>
       <p>{product.description}</p>
     </div>
