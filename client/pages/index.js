@@ -12,7 +12,7 @@ export default function Home() {
         <h1 className={styles.title}>
           Welcome to <span>Nikki's Eshop</span>
         </h1>
-        <Link href='/products' >Start My Journy...</Link>
+        <Link href='/products' >👉Start My Journy...</Link>
       </main>
       </div>
   )

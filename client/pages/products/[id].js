@@ -10,11 +10,10 @@ function Product({product}) {
   // const router = useRouter()
   // const {id} = router.query
   // const product = products.find(pro => pro.id == id)
-  ////
 
   return (
     <div className={styles.product}>
-      <h2>{product.title}</h2>
+      <h1>{product.title}</h1>
       <Image
         src={product.image}
         alt={product.title} width={300} height={300}
@@ -22,7 +21,7 @@ function Product({product}) {
       ></Image>
       <p><span className={styles.price}>{product.price}kr/stk</span>  Category: {product.category} </p>
       <button className={styles.button} onClick={() => {
-        dispatch(addToCart(pro))
+        dispatch(addToCart(product))
         alert('The product is added to cart!')
       }}>Add to Cart</button>
       <p>{product.description}</p>

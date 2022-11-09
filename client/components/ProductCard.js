@@ -21,7 +21,7 @@ function ProductCard({ pro }) {
     <div className={styles.productCard}>
       <Link href={`/products/${pro.id}`} key={pro.id} >
         <a className={styles.product} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
-          {isHovering && <div className={styles.hoverEffect}>Check Details</div>} 
+          {isHovering && <div className={styles.hoverEffect}>Show Details</div>} 
           <Image src={pro.image} alt={pro.name} width={200} height={200}></Image>
           <p className={styles.text}>{pro.title} <span> {pro.price}kr</span></p>
         </a>

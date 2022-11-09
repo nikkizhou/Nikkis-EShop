@@ -6,7 +6,7 @@
 
 .container{
   display: grid;
-  margin-left:2%;
+  margin-left:3%;
   grid-template-columns: repeat(4, 25%);
   align-content: center;
   width: 90vw ;
@@ -46,14 +46,15 @@
 }
 
 
-
 .product p{
   margin-top: auto;
   min-height:5rem;
 }
 
 .text span{
-  font-weight: 800;
+  font-weight: 700;
+  color: #f9826c;
+  font-size: large;
 }
 
 

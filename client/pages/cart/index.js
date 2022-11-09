@@ -8,10 +8,9 @@ const CartPage = () => {
   const dispatch = useDispatch();
 
   const getTotalPrice = () => {
-    return cart.reduce(
-      (accumulator, item) => accumulator + item.quantity * item.price,
-      0
-    );
+    const price = cart.reduce((accumulator, item) => accumulator + item.quantity * item.price, 0)
+    return Math.round(price * 100) / 100
+               
   };
 
   return (
@@ -34,7 +33,7 @@ const CartPage = () => {
                 <Image src={item.image} height="80" width="65" />
               </div>
               <p>{item.title}</p>
-              <p>$ {item.price}</p>
+              <p>{item.price}kr</p>
               <p>{item.quantity}</p>
               <div className={styles.buttons}>
                 <button onClick={() => dispatch(incrementQuantity(item.id))}>
@@ -47,10 +46,10 @@ const CartPage = () => {
                   x
                 </button>
               </div>
-              <p>$ {item.quantity * item.price}</p>
+              <p>{Math.round(item.quantity * item.price * 100) / 100}kr</p>
             </div>
           ))}
-          <h2>Grand Total: $ {getTotalPrice()}</h2>
+          <h2>Grand Total: {getTotalPrice()}kr</h2>
         </>
       )}
     </div>
