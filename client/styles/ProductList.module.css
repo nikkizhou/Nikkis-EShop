@@ -30,14 +30,21 @@
 }
 
 
-
-
 .hoverEffect{
-  background-color: rgba(198, 196, 196, 0.354);
-  color: #f9826c;
+  background-color: rgba(194, 209, 246, 0.301);
+  width: 100%;
+  height: 30%;
+  margin-top: 25%;
+  color: #c64730;
   font-weight: 500;
   font-size: large;
-  z-index: 1;
+  position: absolute;
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+
 }
 
 .filter{

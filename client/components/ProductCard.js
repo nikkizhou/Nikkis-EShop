@@ -28,7 +28,7 @@ function ProductCard({ pro }) {
       </Link>
       <button className={styles.button} onClick={() => {
         dispatch(addToCart(pro))
-      }}>Add to Cart</button>
+      }}>Add to Cart 🛒</button>
     </div>
   )
 }

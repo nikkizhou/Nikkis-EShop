@@ -1,0 +1,17 @@
+.main{
+  position: absolute;
+  z-index: 200;
+  margin-left: 24.5%;
+  margin-top: 5%;
+  background-color: rgba(209, 252, 211, 0.733);
+  border-radius: 20px;
+  font-size: larger;
+  font-weight: 500;
+}
+
+.main button{
+  margin-top: 3%;
+  border: 0ch;
+  border-radius: 3px;
+  background-color: rgb(151, 235, 112);
+}

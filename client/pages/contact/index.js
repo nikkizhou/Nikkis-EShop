@@ -6,6 +6,10 @@ const ContactForm = () => {
   const [status, setStatus] = useState("Submit");
   const [alertStatus, setAlertStatus] = useState();
 
+  const closeAlert = () => setAlertStatus("")
+
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("Sending...");
@@ -29,7 +33,7 @@ const ContactForm = () => {
   
   return (
     <>
-      {alertStatus && <CusAlert status={alertStatus} />}
+      {alertStatus && <CusAlert status={alertStatus} closeAlert={closeAlert} />}
     <form className={styles.form} onSubmit={handleSubmit}>
       <input className={styles.input} type="text" id="name" placeholder="Name"  required />
       <input className={styles.input} type="email" id="email" placeholder="Email" required />

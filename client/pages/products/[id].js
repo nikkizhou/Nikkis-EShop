@@ -22,7 +22,7 @@ function Product({product}) {
       <p><span className={styles.price}>{product.price}kr/stk</span>  Category: {product.category} </p>
       <button className={styles.button} onClick={() => {
         dispatch(addToCart(product))
-      }}>Add to Cart</button>
+      }}>Add to Cart 🛒</button>
       <p>{product.description}</p>
     </div>
 

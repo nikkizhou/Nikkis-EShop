@@ -1,8 +1,10 @@
-import {Alert,AlertIcon, AlertTitle,AlertDescription} from '@chakra-ui/react'
+import { Alert, AlertIcon, AlertTitle, AlertDescription, CloseButton } from '@chakra-ui/react'
 import React from 'react'
+import styles from '../styles/CusAlert.module.css'
 
 
-function CusAlert(status) {
+function CusAlert({status, closeAlert}) {
+
   const errorAlert =
     <Alert status='error'>
       <AlertIcon />
@@ -11,7 +13,8 @@ function CusAlert(status) {
     </Alert>
   
   return (
-    status == "ERROR"
+    <div className={styles.main}>
+    {status == "ERROR"
     ? errorAlert
     : <Alert
       status='success'
@@ -29,7 +32,9 @@ function CusAlert(status) {
       <AlertDescription maxWidth='sm'>
         Thanks for contacting us. Our team will get back to you soon.
       </AlertDescription>
-    </Alert>
+      <button onClick={()=>closeAlert()}> X </button>
+      </Alert>}
+    </div>
   )
 }
 
