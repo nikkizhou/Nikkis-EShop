@@ -4,5 +4,5 @@
 
 ## Todos:
 Typescript, Review, coupon, authentication  
-Database: user(shopping history, cart), business
+Database: user(shopping history, cart), business  
 deployment
