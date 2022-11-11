@@ -5,3 +5,4 @@ Backend: node, express, nodemailer for sending email,
 #Todos:
 Typescript, Review, coupon, authentication
 Database: user(shopping history, cart), business
+deployment
