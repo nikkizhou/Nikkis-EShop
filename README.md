@@ -1,8 +1,10 @@
 ## Tech stack:
-**Frontend**: nextjs, react, redux  
-**Backend**: node, express, nodemailer for sending email
+**General**: Typescript  
+**Frontend**: Nextjs, React, ReduxToolKit  
+**Backend**: Node, Express, Nodemailer (for sending email)
 
 ## Todos:
-Typescript, Review, coupon, authentication  
-Database: user(shopping history, cart), business  
-deployment
+Comments, Coupons, Authentication  
+Database: user(shopping history, cart), business, products
+CMS content management system
+Deployment
