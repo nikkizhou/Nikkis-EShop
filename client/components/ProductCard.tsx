@@ -9,15 +9,9 @@ import {Product} from '../interfaces'
 function ProductCard({ pro }: {pro:Product}) {
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const dispatch = useDispatch();
-
-  const handleMouseOver = () => {
-    setIsHovering(true);
-  };
-
-  const handleMouseOut = () => {
-    setIsHovering(false);
-  };
-
+  const handleMouseOver = () => setIsHovering(true);
+  const handleMouseOut = () => setIsHovering(false);
+  
   return (
     <div className={styles.productCard}>
       <Link href={`/products/${pro.id}`} key={pro.id} >

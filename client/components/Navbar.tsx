@@ -19,21 +19,24 @@ const Navbar = () => {
         <li className={styles.navlink}> <Link href="/products">Products</Link> </li>
         <li className={styles.navlink}> <Link href="/cart">{ cartDisplay}</Link></li>
         <li className={styles.navlink}> <Link href="/contact">Contact</Link></li>
+        <li className={styles.navlink}> <Link href="/profile">Profile</Link></li>
+        <li className={styles.navlink}>
+          {!isLoading && !user && (
+          <button
+            className={styles.btn}
+            onClick={() => loginWithRedirect()}
+          >Log in</button>
+        )}
+
+          {!isLoading && user && (
+            <button
+              className={styles.btn}
+              onClick={() => logout()}
+            >Log out</button>
+          )}</li>
+          
       </ul>
     </nav>
-    {!isLoading && !user && (
-        <button
-          className={styles.navlink}
-          onClick= {()=>loginWithRedirect()}
-        >Log In</button>
-      )}
-
-    {!isLoading && user && (
-      <button
-        className={styles.navlink}
-        onClick={() => logout()}
-      >Log Out</button>
-    )}
     </>
   );
 };

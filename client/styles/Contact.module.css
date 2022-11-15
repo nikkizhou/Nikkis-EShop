@@ -1,9 +1,14 @@
+.container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .form{
   display: flex;
   flex-direction: column;
   width: 40vw;
   height: 70%;
-  margin-left: 30%;
   margin-top: 2%;
   position: relative;
 }
