@@ -2,6 +2,7 @@ import express, { Request, Response, Application } from 'express';
 import "dotenv/config"
 import cors from "cors"
 import contactEmail from './nodemailer'
+import db from "./models";
 
 const router = express.Router();
 
@@ -30,6 +31,18 @@ router.post("/contact", (req: Request, res: Response) => {
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/", router);
+
+
+db.sequelize.sync({ force: true })
+  .then(() => {
+    console.log("Synced db.");
+  })
+  .catch((err:Error) => {
+    console.log("Failed to sync db: " + err.message);
+  });
+
 
 export default app;
