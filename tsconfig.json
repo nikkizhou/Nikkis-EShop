@@ -25,6 +25,7 @@
     "incremental": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "noImplicitAny":false,
   },
   "ts-node": {
     "esm": true

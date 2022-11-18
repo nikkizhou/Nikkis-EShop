@@ -1,38 +1,47 @@
 import db from "../models";
+import { Request, Response } from 'express';
 const User = db.user;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Tutorial
-exports.create = (req:Request, res:Response) => {
+export const addUser = async (req: Request, res: Response) => {
+  if (req.body) {
+    const { name, email, address, phone} = req.body
+    const user = { name, email, address,phone };
+
+    User.create(user)
+      .then((data: any) => { res.status(201).json({ success: "User created" })})
+      .catch((err: Error) => { res.status(500).send({ message: err.message || "Failed to add user to database" })});
+    
+    return user;
+  }
+
+  res.status(400).json({ error: "Failed to add. Please provide request body" });
+};
+
+
+export const findAll = (req: Request, res: Response) => {
+  User.findAll()
+    .then(data => res.send(data))
+    .catch(err => {res.status(500).send({message:err.message || "Some error occurred while retrieving tutorials."}) });
+};
+
+export const findOne = (req: Request, res: Response) => {
 
 };
 
-// Retrieve all Tutorials from the database.
-exports.findAll = (req:Request, res:Response) => {
+export const update = (req: Request, res: Response) => {
 
 };
 
-// Find a single Tutorial with an id
-exports.findOne = (req:Request, res:Response) => {
+
+export const deleteUser = (req: Request, res: Response) => {
 
 };
 
-// Update a Tutorial by the id in the request
-exports.update = (req:Request, res:Response) => {
+export const deleteAll = (req: Request, res: Response) => {
 
 };
 
-// Delete a Tutorial with the specified id in the request
-exports.delete = (req:Request, res:Response) => {
-
-};
-
-// Delete all Tutorials from the database.
-exports.deleteAll = (req:Request, res:Response) => {
-
-};
-
-// Find all published Tutorials
-exports.findAllPublished = (req:Request, res:Response) => {
+export const findAllPublished = (req: Request, res: Response) => {
 
 };

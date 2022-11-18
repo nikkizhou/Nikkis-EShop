@@ -1,7 +1,9 @@
-import Reat, { useState } from 'react'
+import Reat, { useEffect, useState } from 'react'
 import { userProfile } from '../../interfaces'
 import styles from '../../styles/ProfilePage.module.css'
 import { FaUpload } from "react-icons/fa";
+import { useAuth0 } from '@auth0/auth0-react';
+
 
 const ImgUpload = ({ onChange, src }) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);
@@ -33,28 +35,30 @@ const Input = ({ onChange, value, type }) =>
 
 
 const Profile = ({ onSubmit, src, user }) => {
-  const { name, address, email } = user
+  const { name, address, email,phone } = user
   
   return(
-  <div className={styles.card}>
-    <form onSubmit={onSubmit}>
-      <label className={styles.fileUpload}>
-        <div className={styles.imgWrap} >
-          <img src={src} />
-        </div>
-      </label>
-      <h2 className={styles.name}>Name: {name}</h2>
-      <h3 className={styles.details}>Email: {email}</h3>
-      <h3 className={styles.details}>Address: {address}</h3>
-      <button type="submit" className={styles.edit}>Edit Profile </button>
-    </form>
-  </div>)}
+    <div className={styles.card}>
+      <form onSubmit={onSubmit}>
+        <h2>My Profile</h2>
+        <label className={styles.fileUpload}>
+          <div className={styles.imgWrap} >
+            <img src={src} />
+          </div>
+        </label>
+        <h2 className={styles.name}>Name: {name}</h2>
+        <h3 className={styles.details}>Phone: {phone}</h3>
+        <h3 className={styles.details}>Email: {email}</h3>
+        <h3 className={styles.details}>Address: {address}</h3>
+        <button type="submit" className={styles.edit}>Edit Profile </button>
+      </form>
+    </div>)}
 
 
 const Edit = ({ onSubmit, children, }) =>
   <div className={styles.card}>
     <form onSubmit={onSubmit}>
-      <h1>My Account</h1>
+      <h2>Edit Profile</h2>
       {children}
       <button type="submit" className={styles.save}>Save </button>
     </form>
@@ -62,6 +66,7 @@ const Edit = ({ onSubmit, children, }) =>
 
 
 const CardProfile = () => {
+  const { loginWithRedirect, logout, user, isLoading } = useAuth0();
   const [state, setState] = useState<userProfile>({
     file: '',
     imagePreviewUrl: 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true',
@@ -69,8 +74,13 @@ const CardProfile = () => {
     address: '',
     active: 'profile',
     phone: null,
-    email: ''
+    email: user?.email
   }) 
+
+  // console.log(user?.email);
+  // useEffect(() => {
+  //   user && setState({...state, email:user.email})
+  // },[]);
 
   const photoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -94,7 +104,7 @@ const CardProfile = () => {
   const { phone,email,imagePreviewUrl,name,address,active} = state
   return (
     <div className={styles.container}>
-      {(active == 'edit') ? (
+      {user&& (active == 'edit') ? (
         <Edit onSubmit={handleSubmit}>
           <ImgUpload onChange={photoUpload} src={imagePreviewUrl} />
           <Input onChange={editInput} value={name} type='name' />
