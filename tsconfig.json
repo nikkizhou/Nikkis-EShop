@@ -34,5 +34,5 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "pages/products/index.js", "components/CusAlert.js"  ]
+, "pages/products/index.js", "components/CusAlert.js", "client/prisma/schema.prisma", "client/prisma/dev.db"  ]
 }

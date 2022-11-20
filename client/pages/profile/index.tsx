@@ -1,8 +1,10 @@
 import Reat, { useEffect, useState } from 'react'
-import { userProfile } from '../../interfaces'
+import { UserI } from '../../interfaces'
 import styles from '../../styles/ProfilePage.module.css'
 import { FaUpload } from "react-icons/fa";
 import { useAuth0 } from '@auth0/auth0-react';
+import { PrismaClient } from '@prisma/client';
+import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 
 
 const ImgUpload = ({ onChange, src }) => {
@@ -65,17 +67,12 @@ const Edit = ({ onSubmit, children, }) =>
   </div>
 
 
-const CardProfile = () => {
+const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
   const { loginWithRedirect, logout, user, isLoading } = useAuth0();
-  const [state, setState] = useState<userProfile>({
-    file: '',
-    imagePreviewUrl: 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true',
-    name: '',
-    address: '',
-    active: 'profile',
-    phone: null,
-    email: user?.email
-  }) 
+  const [state, setState] = useState<UserI>(dbUser) 
+
+  dbUser && console.log(dbUser,"dbUser");
+  
 
   // console.log(user?.email);
   // useEffect(() => {
@@ -119,12 +116,21 @@ const CardProfile = () => {
           user={state} />)}
     </div>
   )
-  
 }
-
-
 
 export default CardProfile;
 
 
-//input[type="file"]{display:none}
+export const getServerSideProps = withPageAuthRequired({
+  getServerSideProps: async ({ req, res }) => {
+    const auth0User = getSession(req, res);
+
+    const prisma = new PrismaClient();
+    let user = await prisma.user.findUnique({
+      where: { email: auth0User?.user.email}})
+
+    if (!user) user = await prisma.user.create({data:{email: auth0User?.user.email}} )
+
+    return {props: {dbUser: user}};
+  },
+});

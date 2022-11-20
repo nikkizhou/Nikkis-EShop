@@ -1,0 +1,18 @@
+datasource db {
+  provider = "postgresql"
+  url = env("NEXT_PUBLIC_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  address       String?
+  email         String?   @unique
+  phone         Int?      
+ 
+  @@map("users")
+}

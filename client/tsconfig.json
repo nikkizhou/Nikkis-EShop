@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "prisma/schema.prisma", "prisma/dev.db"  ],
   "exclude": [
     "node_modules"
   ]

@@ -4,12 +4,14 @@ const User = db.user;
 const Op = db.Sequelize.Op;
 
 export const addUser = async (req: Request, res: Response) => {
+  console.log(req.body,"!!!");
+  
   if (req.body) {
     const { name, email, address, phone} = req.body
     const user = { name, email, address,phone };
 
     User.create(user)
-      .then((data: any) => { res.status(201).json({ success: "User created" })})
+      .then((data: any) => { res.status(201).json(data)})
       .catch((err: Error) => { res.status(500).send({ message: err.message || "Failed to add user to database" })});
     
     return user;
@@ -20,9 +22,10 @@ export const addUser = async (req: Request, res: Response) => {
 
 
 export const findAll = (req: Request, res: Response) => {
+
   User.findAll()
-    .then(data => res.send(data))
-    .catch(err => {res.status(500).send({message:err.message || "Some error occurred while retrieving tutorials."}) });
+    .then((data: any) => res.json(data))
+    .catch((err: Error) => {res.status(500).send({message:err.message || "Some error occurred while retrieving users."}) });
 };
 
 export const findOne = (req: Request, res: Response) => {
