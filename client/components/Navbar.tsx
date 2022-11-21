@@ -2,13 +2,14 @@ import Link from 'next/link';
 import styles from '../styles/Navbar.module.css'
 import { useSelector } from 'react-redux';
 import { Cart } from '../interfaces'
-import { useAuth0 } from '@auth0/auth0-react';
+import { useUser } from '@auth0/nextjs-auth0';
+
 
 
 const Navbar = () => {
   const cart: Cart = useSelector((state: {cart: Cart}) => state.cart);
   const cartDisplay: string = 'Cart🛒' + cart.length  
-  const { loginWithRedirect, logout, user, isLoading } = useAuth0();
+  const { user, error, isLoading } = useUser();
   
   return (
     <>
@@ -19,20 +20,16 @@ const Navbar = () => {
         <li className={styles.navlink}> <Link href="/products">Products</Link> </li>
         <li className={styles.navlink}> <Link href="/cart">{ cartDisplay}</Link></li>
         <li className={styles.navlink}> <Link href="/contact">Contact</Link></li>
-        <li className={styles.navlink}> <Link href="/profile">Profile</Link></li>
         <li className={styles.navlink}>
           {!isLoading && !user && (
-          <button
-            className={styles.btn}
-            onClick={() => loginWithRedirect()}
-          >Log in</button>
+            <li className={styles.btn}><Link href="/api/auth/login">Log in</Link></li>
         )}
 
           {!isLoading && user && (
-            <button
-              className={styles.btn}
-              onClick={() => logout()}
-            >Log out</button>
+              <div className={styles.proNLogout}>
+              <div className={styles.navlink}> <Link href="/profile">Profile</Link></div>
+              <div className={styles.btn}> <Link href="/api/auth/logout">Log out</Link></div>
+            </div>
           )}</li>
           
       </ul>

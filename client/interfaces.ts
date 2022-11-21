@@ -12,11 +12,11 @@ export interface Product{
 export type Cart = Product[]
 
 export interface UserI{
+  id: string
   file?: string | File
-  imagePreviewUrl?: string | ArrayBuffer | any
+  image?: string | ArrayBuffer | any
   name?:string
   address?:string
-  active?: string
   phone?: number
   email:string 
 }

@@ -12,7 +12,8 @@ model User {
   name          String?
   address       String?
   email         String?   @unique
-  phone         Int?      
+  phone         Int?  
+  image         String?    
  
   @@map("users")
 }

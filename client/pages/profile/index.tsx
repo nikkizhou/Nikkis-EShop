@@ -1,118 +1,65 @@
-import Reat, { useEffect, useState } from 'react'
+import Reat, { useState } from 'react'
 import { UserI } from '../../interfaces'
 import styles from '../../styles/ProfilePage.module.css'
-import { FaUpload } from "react-icons/fa";
-import { useAuth0 } from '@auth0/auth0-react';
 import { PrismaClient } from '@prisma/client';
-import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
-
-
-const ImgUpload = ({ onChange, src }) => {
-  const [isHovering, setIsHovering] = useState<boolean>(false);
-  const handleMouseOver = () => setIsHovering(true);
-  const handleMouseOut = () => setIsHovering(false);
-
-  return (
-    <label htmlFor="photo-upload" className={styles.fileUpload} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
-      <div className={`${styles.imgWrap} ${styles.imgUpload}`}>
-        {isHovering &&<FaUpload className={styles.uploadIcon} />}
-        <img src={src} />
-      </div>
-      <input id="photo-upload" type="file" onChange={onChange} className={styles.hide} />
-    </label>
-  )}
-
-const Input = ({ onChange, value, type }) =>
-  <div className={styles.field}>
-    <label htmlFor={type}>{type}</label>
-    <input
-      id={type}
-      type={type}
-      onChange={onChange}
-      value={value}
-      placeholder={value}
-      name={type}
-    />
-  </div>
-
-
-const Profile = ({ onSubmit, src, user }) => {
-  const { name, address, email,phone } = user
-  
-  return(
-    <div className={styles.card}>
-      <form onSubmit={onSubmit}>
-        <h2>My Profile</h2>
-        <label className={styles.fileUpload}>
-          <div className={styles.imgWrap} >
-            <img src={src} />
-          </div>
-        </label>
-        <h2 className={styles.name}>Name: {name}</h2>
-        <h3 className={styles.details}>Phone: {phone}</h3>
-        <h3 className={styles.details}>Email: {email}</h3>
-        <h3 className={styles.details}>Address: {address}</h3>
-        <button type="submit" className={styles.edit}>Edit Profile </button>
-      </form>
-    </div>)}
-
-
-const Edit = ({ onSubmit, children, }) =>
-  <div className={styles.card}>
-    <form onSubmit={onSubmit}>
-      <h2>Edit Profile</h2>
-      {children}
-      <button type="submit" className={styles.save}>Save </button>
-    </form>
-  </div>
+import { useUser, getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import ImgUpload from '../../components/profile/ImgUpload'
+import Input from '../../components/profile/Input'
+import Edit from '../../components/profile/Edit'
+import Profile from '../../components/profile/Profile'
 
 
 const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
-  const { loginWithRedirect, logout, user, isLoading } = useAuth0();
+  const { user, error, isLoading } = useUser();
   const [state, setState] = useState<UserI>(dbUser) 
+  const [isEditing, setIsEditing] = useState<boolean>(false) 
+
 
   dbUser && console.log(dbUser,"dbUser");
-  
-
-  // console.log(user?.email);
-  // useEffect(() => {
-  //   user && setState({...state, email:user.email})
-  // },[]);
 
   const photoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const reader = new FileReader();
     const file = e.target.files[0];
-    reader.onloadend = () => setState({ ...state, file, imagePreviewUrl: reader.result })
+    reader.onloadend = () => setState({ ...state, file, image: reader.result })
     reader.readAsDataURL(file);
   }
 
   const editInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setState({ ...state, [e.target.name]: value});
+    setState({ ...state, [e.target.name]: value });
   }
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const updateUser = async (newUser: UserI) => {
+    const res = await fetch(`/api/profile/${dbUser.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(newUser)
+    })
+    return res.json();
+    
+  }
+
+  const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    let activeP = state.active == 'edit' ? 'profile' : 'edit';
-    setState({ ...state, active: activeP,})
+    setIsEditing(prev=>!prev)
+    await updateUser(state)
   }
 
-  const { phone,email,imagePreviewUrl,name,address,active} = state
+  const { phone,email,image,name,address} = state
   return (
     <div className={styles.container}>
-      {user&& (active == 'edit') ? (
+      {user&& (isEditing) ? (
         <Edit onSubmit={handleSubmit}>
-          <ImgUpload onChange={photoUpload} src={imagePreviewUrl} />
-          <Input onChange={editInput} value={name} type='name' />
-          <Input onChange={editInput} value={address} type='address'  />
-          <Input onChange={editInput} value={email} type='email'  />
-          <Input onChange={editInput} value={phone} type='phone'/>
+          <ImgUpload onChange={photoUpload} src={image} />
+          <Input onChange={editInput} value={name || ''} id ='name' type='name' />
+          <Input onChange={editInput} value={address || ''} id='address' type='address'  />
+          <Input onChange={editInput} value={email || ''} id='email' type='email'  />
+          <Input onChange={editInput} value={phone || ''} id='phone' type='number'/>
         </Edit>
       ) : (
         <Profile
           onSubmit={handleSubmit}
-          src={imagePreviewUrl}
+          src={image}
           user={state} />)}
     </div>
   )
@@ -120,11 +67,9 @@ const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
 
 export default CardProfile;
 
-
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async ({ req, res }) => {
     const auth0User = getSession(req, res);
-
     const prisma = new PrismaClient();
     let user = await prisma.user.findUnique({
       where: { email: auth0User?.user.email}})

@@ -5,6 +5,8 @@ CREATE TABLE "users" (
     "address" TEXT,
     "email" TEXT,
     "phone" INTEGER,
+    "image" TEXT,
+
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );

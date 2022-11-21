@@ -50,3 +50,9 @@
   box-shadow: 0 0 20px rgba(224, 131, 85, 0.6);
   background-color: rgb(234, 120, 100);
 }
+
+.proNLogout{
+  display: flex;
+  flex-direction: row;
+  margin-left: -10%;
+}
