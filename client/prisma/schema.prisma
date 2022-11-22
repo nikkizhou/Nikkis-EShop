@@ -13,7 +13,15 @@ model User {
   address       String?
   email         String?   @unique
   phone         Int?  
-  image         String?    
- 
+  image         String?   
+  role          Role     @default(USER) 
+  
   @@map("users")
+}
+
+
+
+enum Role {
+  USER
+  ADMIN
 }

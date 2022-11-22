@@ -7,22 +7,49 @@ import ImgUpload from '../../components/profile/ImgUpload'
 import Input from '../../components/profile/Input'
 import Edit from '../../components/profile/Edit'
 import Profile from '../../components/profile/Profile'
-
+import axios from 'axios'
 
 const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
   const { user, error, isLoading } = useUser();
   const [state, setState] = useState<UserI>(dbUser) 
   const [isEditing, setIsEditing] = useState<boolean>(false) 
 
-
   dbUser && console.log(dbUser,"dbUser");
+  
 
-  const photoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const photoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const reader = new FileReader();
     const file = e.target.files[0];
-    reader.onloadend = () => setState({ ...state, file, image: reader.result })
+    // reader.onloadend = () => setState({ ...state, file, image: reader.result })
     reader.readAsDataURL(file);
+
+    axios
+      .post("/api/upload-image", {
+        fileName: encodeURIComponent(file.name),
+        fileType: file.type
+      })
+      .then(res => {
+        const signedRequest = res.data.signedRequest;
+        const url = res.data.url;
+        setState({ ...state, image: url });
+
+        // var options = {headers: {"Content-Type": file.type}};
+        // axios
+        //   .put(signedRequest, file, options)
+        //   .then(_ => {
+        //     setUploadState({ ...uploadState, success: true });
+        //     mutate();
+        //   })
+        //   .catch(_ => {
+        //     toast("error", "We could not upload your image");
+        //   });
+      })
+      .catch(error => {
+        console.log("error", "We could not upload your image");
+      });
+
+
   }
 
   const editInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,12 +58,14 @@ const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
   }
 
   const updateUser = async (newUser: UserI) => {
-    const res = await fetch(`/api/profile/${dbUser.id}`, {
+    const { id, name, address, email, phone, image } = newUser
+    console.log(id,"id!!");
+    
+    const res = await fetch(`/api/profile/${id}`, {
       method: 'PUT',
-      body: JSON.stringify(newUser)
+      body: JSON.stringify({ id, name, address, email, phone, image })
     })
     return res.json();
-    
   }
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +103,7 @@ export const getServerSideProps = withPageAuthRequired({
     let user = await prisma.user.findUnique({
       where: { email: auth0User?.user.email}})
 
-    if (!user) user = await prisma.user.create({data:{email: auth0User?.user.email}} )
+    if (!user) user = await prisma.user.create({ data: { email: auth0User?.user.email } })
 
     return {props: {dbUser: user}};
   },
