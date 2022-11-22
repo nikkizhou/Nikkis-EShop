@@ -1,9 +1,9 @@
 ## Tech stack:
-**General**: Typescript  
+**General**: Typescript,Nextjs  
 **Frontend**:   
-Nextjs, React, ReduxToolKit, Autho0  
+React, ReduxToolKit, Auth0  
 **Backend**:   
-Node, Express, PostgreSQL, Nodemailer (for sending email)
+Prisma, PostgreSQL, Nodemailer (for sending email)
  
 
 ## Todos:
