@@ -8,48 +8,57 @@ import Input from '../../components/profile/Input'
 import Edit from '../../components/profile/Edit'
 import Profile from '../../components/profile/Profile'
 import axios from 'axios'
+import aws from "aws-sdk";
 
 const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
   const { user, error, isLoading } = useUser();
   const [state, setState] = useState<UserI>(dbUser) 
   const [isEditing, setIsEditing] = useState<boolean>(false) 
 
-  dbUser && console.log(dbUser,"dbUser");
-  
 
   const photoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const reader = new FileReader();
     const file = e.target.files[0];
-    // reader.onloadend = () => setState({ ...state, file, image: reader.result })
-    reader.readAsDataURL(file);
+    file && reader.readAsDataURL(file);
+    const fileName = encodeURIComponent(file.name)
+    await upload(fileName, file) 
+    await getURL(file.type,fileName)
+  }
 
+  const getURL = async (fileType:string,fileName:string) => {
     axios
       .post("/api/upload-image", {
-        fileName: encodeURIComponent(file.name),
-        fileType: file.type
+        fileName: fileName,
+        fileType: fileType,
+        id: state.id
       })
-      .then(res => {
-        const signedRequest = res.data.signedRequest;
-        const url = res.data.url;
-        setState({ ...state, image: url });
+      .then(res => setState({ ...state, image: res.data.url }))
+      .catch(error => console.log("Error on uploading image: "+error.message));
+  }
 
-        // var options = {headers: {"Content-Type": file.type}};
-        // axios
-        //   .put(signedRequest, file, options)
-        //   .then(_ => {
-        //     setUploadState({ ...uploadState, success: true });
-        //     mutate();
-        //   })
-        //   .catch(_ => {
-        //     toast("error", "We could not upload your image");
-        //   });
-      })
-      .catch(error => {
-        console.log("error", "We could not upload your image");
-      });
+  const upload = async (fileName: string, file: File) => {
+    aws.config.update({
+      region: process.env.NEXT_PUBLIC_APP_AWS_REGION,
+      accessKeyId: process.env.NEXT_PUBLIC_APP_AWS_ACCESS_KEY,
+      secretAccessKey: process.env.NEXT_PUBLIC_APP_AWS_SECRET_KEY
+    });
 
+    const bucketName = process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME
+    var photoKey = "users /" + fileName;
+    var upload = new aws.S3.ManagedUpload({
+      params: {
+        Bucket: bucketName,
+        Key: photoKey,
+        Body: file,
+        ContentType: file.type,
+      }
+    });
 
+    upload.promise()
+      .then(data => alert("Successfully uploaded photo."))
+      .catch(err => alert("There was an error uploading your photo: " + err.message))
+  
   }
 
   const editInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,9 +66,8 @@ const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
     setState({ ...state, [e.target.name]: value });
   }
 
-  const updateUser = async (newUser: UserI) => {
+  const updateDBUser = async (newUser: UserI) => {
     const { id, name, address, email, phone, image } = newUser
-    console.log(id,"id!!");
     
     const res = await fetch(`/api/profile/${id}`, {
       method: 'PUT',
@@ -71,7 +79,7 @@ const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
   const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setIsEditing(prev=>!prev)
-    await updateUser(state)
+    await updateDBUser(state)
   }
 
   const { phone,email,image,name,address} = state
