@@ -3,7 +3,7 @@
 **Frontend**:   
 React, ReduxToolKit, Auth0  
 **Backend**:   
-Prisma, PostgreSQL, Nodemailer (for sending email)
+Prisma, PostgreSQL, AWS s3,  Nodemailer (for sending email)
  
 
 ## Todos:
