@@ -19,9 +19,28 @@ model User {
   @@map("users")
 }
 
-
-
 enum Role {
   USER
   ADMIN
+}
+
+model Rating{
+  id           Int        @id @default(autoincrement())
+  rate         Float
+  count        Int
+  product      Product?    @relation(fields: [productId], references: [id])
+  productId    Int        @unique
+}
+
+model Product {
+  id            Int   @id
+  title         String?
+  price         Float?
+  description   String?   
+  image         String?  
+  category      String?     
+  rating        Rating?
+
+  
+  @@map("products")
 }

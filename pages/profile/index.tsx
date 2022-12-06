@@ -22,7 +22,7 @@ const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
     const file = e.target.files[0];
     file && reader.readAsDataURL(file);
     const fileName = encodeURIComponent(file.name)
-    await upload(fileName, file) 
+    await uploadToAWS(fileName, file) 
     await getURL(file.type,fileName)
   }
 
@@ -37,7 +37,7 @@ const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
       .catch(error => console.log("Error on uploading image: "+error.message));
   }
 
-  const upload = async (fileName: string, file: File) => {
+  const uploadToAWS = async (fileName: string, file: File) => {
     aws.config.update({
       region: process.env.NEXT_PUBLIC_APP_AWS_REGION,
       accessKeyId: process.env.NEXT_PUBLIC_APP_AWS_ACCESS_KEY,
@@ -58,7 +58,6 @@ const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
     upload.promise()
       .then(data => alert("Successfully uploaded photo."))
       .catch(err => alert("There was an error uploading your photo: " + err.message))
-  
   }
 
   const editInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,7 +84,7 @@ const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
   const { phone,email,image,name,address} = state
   return (
     <div className={styles.container}>
-      {user&& (isEditing) ? (
+      {user && isEditing ? (
         <Edit onSubmit={handleSubmit}>
           <ImgUpload onChange={photoUpload} src={image} />
           <Input onChange={editInput} value={name || ''} id ='name' type='name' />

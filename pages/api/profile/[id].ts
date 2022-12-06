@@ -20,7 +20,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     
     res.status(200).json({ message: 'Profile Updated!' })
   } catch (error) {
-    console.log(error.message);
     res.status(500).json({error:error.message})
   }
   

@@ -4,7 +4,8 @@ import styles from '../../styles/Product.module.css'
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../cart_redux/cart.slice';
 import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
-import {Product} from '../../interfaces'
+import { Product } from '../../interfaces'
+import { prisma, PrismaClient } from '@prisma/client';
 
 
 
@@ -32,18 +33,29 @@ function Product({product}: {product: Product}) {
   )
 }
 
+
 //generate generate dynamic routing page statically with getStaticPaths() and getStaticProps()
 export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch('https://fakestoreapi.com/products')
-  const products = await res.json()
+  //const res = await fetch('https://fakestoreapi.com/products')
+  //const products = await res.json()
+  
+  // products.forEach(async (pro: Product) => {
+  //   //@ts-ignore
+  //   pro.rating = { create: pro.rating }
+  //   const newProducts =  await prisma.product.create({data: pro})
+  // })
+  const prisma = new PrismaClient();
+  const products = await prisma.product.findMany({})
   const paths = products.map((pro: Product) => ({ params: { id: pro.id.toString() }}))
   return { paths, fallback: false }
 }
 
-export const getStaticProps: GetStaticProps = async ({params}) => {
-  // the params comes from getStaticPath 
-  const res = await fetch(`https://fakestoreapi.com/products/${params.id}`)
-  const product = await res.json()
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  // the params comes from getStaticPath
+  // const res = await fetch(`https://fakestoreapi.com/products/${params.id}`)
+  // const product = await res.json()
+  const prisma = new PrismaClient();
+  const product = await prisma.product.findUnique({where:{id:Number(params.id)}})
   return { props: { product } }
 }
 

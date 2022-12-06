@@ -22,7 +22,7 @@ const Navbar = () => {
         <li className={styles.navlink}> <Link href="/contact">Contact</Link></li>
         <li className={styles.navlink}>
           {!isLoading && !user && (
-            <li className={styles.btn}><Link href="/api/auth/login">Log in</Link></li>
+            <div className={styles.btn}><Link href="/api/auth/login">Log in</Link></div>
         )}
 
           {!isLoading && user && (
