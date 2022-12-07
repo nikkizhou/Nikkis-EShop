@@ -1,18 +1,22 @@
 import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
-import {incrementQuantity,decrementQuantity,removeFromCart,} from '../../cart_redux/cart.slice';
+import {incrementQuantity,decrementQuantity,removeFromCart,} from '../../redux/cart.slice';
 import styles from '../../styles/CartPage.module.css';
 import { Cart } from '../../interfaces'
+import { prisma, PrismaClient } from '@prisma/client';
+import { useUser } from '@auth0/nextjs-auth0';
 
 const CartPage = () => {
   const cart: Cart = useSelector((state: { cart: Cart }) => state.cart);
   const dispatch = useDispatch();
-
+  const { user, error, isLoading } = useUser();
+  console.log(user,'user in line 13 in cart');
+  
   const getTotalPrice:Function = () => {
     const price:number = cart.reduce((accumulator, item) => accumulator + item.quantity * item.price, 0)
-    return Math.round(price * 100) / 100
-               
+    return Math.round(price * 100) / 100        
   };
+
 
   return (
     <div className={styles.container}>

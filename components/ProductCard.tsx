@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image';
 import styles from '../styles/ProductList.module.css'
 import { useDispatch } from 'react-redux';
-import { addToCart } from '../cart_redux/cart.slice';
+import { addToCart } from '../redux/cart.slice';
 import {Product} from '../interfaces'
 
 function ProductCard({ pro }: {pro:Product}) {

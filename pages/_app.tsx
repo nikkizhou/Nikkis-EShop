@@ -1,5 +1,5 @@
 import '../styles/globals.css'
-import store from '../cart_redux/store'; 
+import store from '../redux/store'; 
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { Provider } from 'react-redux';

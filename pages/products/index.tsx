@@ -4,6 +4,7 @@ import CategoryFilter from '../../components/CategoryFilter'
 import ProductCard from '../../components/ProductCard';
 import {Product} from '../../interfaces'
 import { GetServerSideProps } from 'next'
+import { prisma, PrismaClient } from '@prisma/client';
 
 function ProductList({ products }: { products: Product[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>();
@@ -31,9 +32,10 @@ function ProductList({ products }: { products: Product[] }) {
     context.query.archived`
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch('https://fakestoreapi.com/products')
-  const products = await res.json()
-
+  //const res = await fetch('https://fakestoreapi.com/products')
+  //const products = await res.json()
+  const prisma = new PrismaClient();
+  const products = await prisma.product.findMany()
   if (!products) return { redirect: { destination: '/', permanent: false, } }
   return { props: { products} }
 }

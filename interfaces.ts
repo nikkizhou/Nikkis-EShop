@@ -6,7 +6,8 @@ export interface Product{
   description: string
   image: string
   category: string
-  rating: { count: number, rate:number}
+  rating: { count: number, rate: number }
+  quantity: number
 }
 
 export type Cart = Product[]
@@ -18,5 +19,6 @@ export interface UserI{
   name?:string
   address?:string
   phone?: number
-  email:string 
+  email: string 
+  role?: string
 }

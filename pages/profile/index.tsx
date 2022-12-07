@@ -11,10 +11,8 @@ import axios from 'axios'
 import aws from "aws-sdk";
 
 const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
-  const { user, error, isLoading } = useUser();
   const [state, setState] = useState<UserI>(dbUser) 
   const [isEditing, setIsEditing] = useState<boolean>(false) 
-
 
   const photoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -67,7 +65,6 @@ const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
 
   const updateDBUser = async (newUser: UserI) => {
     const { id, name, address, email, phone, image } = newUser
-    
     const res = await fetch(`/api/profile/${id}`, {
       method: 'PUT',
       body: JSON.stringify({ id, name, address, email, phone, image })
@@ -81,15 +78,14 @@ const CardProfile = ({ dbUser }: { dbUser: UserI }) => {
     await updateDBUser(state)
   }
 
-  const { phone,email,image,name,address} = state
+  const { phone,image,name,address} = state
   return (
     <div className={styles.container}>
-      {user && isEditing ? (
+      {dbUser && isEditing ? (
         <Edit onSubmit={handleSubmit}>
           <ImgUpload onChange={photoUpload} src={image} />
           <Input onChange={editInput} value={name || ''} id ='name' type='name' />
           <Input onChange={editInput} value={address || ''} id='address' type='address'  />
-          <Input onChange={editInput} value={email || ''} id='email' type='email'  />
           <Input onChange={editInput} value={phone || ''} id='phone' type='number'/>
         </Edit>
       ) : (
@@ -107,11 +103,9 @@ export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async ({ req, res }) => {
     const auth0User = getSession(req, res);
     const prisma = new PrismaClient();
-    let user = await prisma.user.findUnique({
-      where: { email: auth0User?.user.email}})
-
+    let user = await prisma.user.findUnique({ where: { email: auth0User?.user.email}})
     if (!user) user = await prisma.user.create({ data: { email: auth0User?.user.email } })
-
+    
     return {props: {dbUser: user}};
   },
 });
