@@ -3,11 +3,6 @@ import { PrismaClient } from '@prisma/client';
 import { useUser } from '@auth0/nextjs-auth0';
 const prisma = new PrismaClient();
 
-type Data = {
-  message?: string
-  error?: string
-}
-
 
 //  api/cart/?operation="addqty", productId=2
 //  api/cart/addqty
@@ -15,39 +10,50 @@ type Data = {
 //  api/cart/addProduct
 //  api/cart/deleteProduct
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   //const { user, error, isLoading } = useUser();
   const query = req.query;
   const { operation, productId,userId } = query;
   //if (req.method !== 'PUT') return res.send({error:'Wrong request method. Only Put allowed'})
-  const user = await prisma.user.findUnique({ where: { id: (userId as string) } })
-  console.log(user);
-
+ 
   switch (operation) {
     case 'increaseQty':
-      prisma.user.update({
+      await prisma.cartProductsOnUsers.update({
         where: {
-          id: (userId as string),
-          //@ts-ignore
-          cart: { productId: productId },
+          userId_productId: { userId:(userId as string), productId:Number(productId) },
         },
-        //@ts-ignore
-        data: { cart: {quantity:{increment:1}} }
+        data:{quantity:{increment:1}},
+        //data: { name:'test' }
       })
-      console.log('test!!');
-      res.send({message:'test!!'})
+      res.send({ message: 'test!!' })
+      
       
       break;
     case 'decreaseQty':
       
       break;
     case 'addProduct':
+      await prisma.cartProductsOnUsers.create({
+        data: {
+          userId: (userId as string),
+          productId: Number(productId),
+          quantity:1
+        },
+      })
+      // const user = await prisma.user.findUnique({ where: { id: (userId as string) } })
+      // console.log(user, 'user in line 39 in Cart');
+      res.send({ message: 'test!!' })
+
       
       break;
     case 'deleteProduct':
       
       break;
   
+    case 'getCart':
+      const cart = await prisma.cartProductsOnUsers.findMany({ where: { userId: (userId as string) } })
+      res.status(200).send({cart})
+      break;
     default:
       break;
   }

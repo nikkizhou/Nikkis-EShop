@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '../../styles/ProfilePage.module.css'
 
 const Profile = ({ onSubmit, src, user }) => {
-  const { name, address, email, phone } = user
+  if (user) var { name, address, email, phone } = user
 
   return (
     <div className={styles.card}>

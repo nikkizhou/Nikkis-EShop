@@ -1,38 +1,70 @@
-import { createSlice } from '@reduxjs/toolkit';
-import {Product} from '../interfaces'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { Product } from '../interfaces'
+import axios from 'axios'
+import { useUser } from '@auth0/nextjs-auth0';
+
+
+export const getCart = createAsyncThunk(
+  'cart/getCart',
+  async (email: string, thunkAPI) => {
+    //1. getUserById
+    const response = await axios.get('api/getCart', { params: {email } })
+    return response.data
+  }
+)
+
+interface State{
+  loading: boolean
+  cart: Product[],
+  error: string|null
+}
 
 const cartSlice = createSlice({
   name: 'cart',
-  initialState: [],
+  initialState:{loading:true,cart:[],error:null},
   reducers: {
-    addToCart: (state:Product[], action) => {
-      const itemExists: Product | undefined = state.find((item: Product) => item.id === action.payload.id);
-      itemExists ? itemExists.quantity++ : state.push({ ...action.payload, quantity: 1 })
+    addToCart: (state: State, action) =>{
+      //const newCartItem = axios.put('/api/cart/', null, { params: { operation: 'addProduct', productId: }});
+      const itemExists: Product | undefined = state.cart.find((item: Product) => item.id === action.payload.id);
+      itemExists ? itemExists.quantity++ : state.cart.push({ ...action.payload, quantity: 1 })
     },
 
-    incrementQuantity: (state: Product[], action) => {
-      const item: Product | undefined = state.find((item: Product) => item.id === action.payload);
+    incrementQuantity: (state: State, action) => {
+      const item: Product | undefined = state.cart.find((item: Product) => item.id === action.payload);
       item.quantity++;
     },
 
-    decrementQuantity: (state: Product[], action) => {
-      const item:Product| undefined = state.find((item: Product) => item.id === action.payload);
+    decrementQuantity: (state: State, action) => {
+      const item:Product| undefined = state.cart.find((item: Product) => item.id === action.payload);
       if (item?.quantity == 1) {
-        const index:number|undefined = state.findIndex((item) => item.id === action.payload);
-        state.splice(index, 1);
+        const index:number|undefined = state.cart.findIndex((item) => item.id === action.payload);
+        state.cart.splice(index, 1);
       } else {
         item.quantity--;
       }
     },
 
-    removeFromCart: (state: Product[], action) => {
-      const index: number | undefined = state.findIndex((item: Product) => item.id === action.payload);
-      state.splice(index, 1);
+    removeFromCart: (state: State, action) => {
+      const index: number | undefined = state.cart.findIndex((item: Product) => item.id === action.payload);
+      state.cart.splice(index, 1);
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getCart.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(getCart.fulfilled, (state, action) => {
+      state.loading = false
+      state.cart = action.payload
+    })
+    builder.addCase(getCart.rejected, (state,action) => {
+      state.loading = false
+      state.error = action.error.message
+    })
   },
 });
 
-export const cartReducer = cartSlice.reducer;
+export default cartSlice.reducer;
 
 export const {
   addToCart,

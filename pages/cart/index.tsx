@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import {incrementQuantity,decrementQuantity,removeFromCart,} from '../../redux/cart.slice';
 import styles from '../../styles/CartPage.module.css';
 import { Cart } from '../../interfaces'
-import { prisma, PrismaClient } from '@prisma/client';
 import { useUser } from '@auth0/nextjs-auth0';
 
 const CartPage = () => {
