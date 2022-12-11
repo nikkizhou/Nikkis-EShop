@@ -1,78 +1,73 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client';
-import { useUser } from '@auth0/nextjs-auth0';
 const prisma = new PrismaClient();
 
 
-//  api/cart/?operation="addqty", productId=2
-//  api/cart/addqty
-//  api/cart/reduceqty
-//  api/cart/addProduct
-//  api/cart/deleteProduct
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  switch (req.method) {
+    case 'GET':
+      getCart(req, res); break;
+    case 'PUT':
+      updateCart(req, res); break;
+    default:
+      res.status(400).json({error:'Invalid request method!'})
+      break;
+  }
+}
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
-  //const { user, error, isLoading } = useUser();
-  const query = req.query;
-  const { operation, productId,userId } = query;
-  //if (req.method !== 'PUT') return res.send({error:'Wrong request method. Only Put allowed'})
- 
+export default handler
+
+const getCart = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    if (!req.query) return res.status(400).json({ message: 'Please Provide cart Email as Param' })
+    const userId = req.query.userId as string
+    //cart: [{userId:'adslkhj213', productId:1}, {userId:'vlwj234', productId:5},]
+    const cart = await prisma.cartProductsOnUsers.findMany({ where: { userId } })
+    console.log(cart,'cart in api/cart line 27');
+    res.status(200).json(cart)
+
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+//[key: string]: any;
+const updateCart = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (!req.body) return res.status(400).json({ message: 'Please Provide Request Body' })
+  const { operation, productId, userId } = req.body
+
   switch (operation) {
     case 'increaseQty':
-      await prisma.cartProductsOnUsers.update({
-        where: {
-          userId_productId: { userId:(userId as string), productId:Number(productId) },
-        },
-        data:{quantity:{increment:1}},
-        //data: { name:'test' }
+      console.log(userId,'userId line 41 api/cart');
+      
+      const updatedPro = await prisma.cartProductsOnUsers.upsert({
+        where: { userId_productId: { userId, productId } },
+        update: { quantity: { increment: 1 } },
+        create: { userId, productId, quantity: 1 },
       })
-      res.send({ message: 'test!!' })
-      
-      
-      break;
-    case 'decreaseQty':
-      
-      break;
-    case 'addProduct':
-      await prisma.cartProductsOnUsers.create({
-        data: {
-          userId: (userId as string),
-          productId: Number(productId),
-          quantity:1
-        },
-      })
-      // const user = await prisma.user.findUnique({ where: { id: (userId as string) } })
-      // console.log(user, 'user in line 39 in Cart');
-      res.send({ message: 'test!!' })
-
-      
-      break;
-    case 'deleteProduct':
-      
-      break;
+      return updatedPro;
   
-    case 'getCart':
-      const cart = await prisma.cartProductsOnUsers.findMany({ where: { userId: (userId as string) } })
-      res.status(200).send({cart})
+    case 'decreaseQty':
+
+      break;
+    case 'removeProduct':
+
       break;
     default:
       break;
   }
-
-  // try {
-  //   const id = req.query.id as string
-  //   const reqBody = JSON.parse(req.body)
-  //   const reqBodyFixed = { ...reqBody, phone: Number(reqBody.phone) }
-
-  //   await prisma.user.update({
-  //     where: { id: id },
-  //     data: reqBodyFixed
-  //   })
-
-  //   res.status(200).json({ message: 'Profile Updated!' })
-  // } catch (error) {
-  //   res.status(500).json({ error: error.message })
-  // }
-
 }
 
-export default handler
+
+// const increaseQty = async (req: NextApiRequest, res: NextApiResponse) => {
+//   try {
+//     if (!req.body) return res.status(400).json({ message: 'Please Provide Request Body' })
+//     const newProfile = await prisma.cartProductsOnUsers.update({
+//       where: { id: req.body.id },
+//       data: req.body
+//     })
+//     res.status(200).json(newProfile)
+//   } catch (error) {
+//     res.status(500).json({ error: error.message })
+//   }
+// }

@@ -4,7 +4,8 @@ import Image from 'next/image';
 import styles from '../styles/ProductList.module.css'
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/cart.slice';
-import {Product} from '../interfaces'
+import { Product } from '../interfaces'
+import { updateCart } from '../redux/actions/cartActions';
 
 function ProductCard({ pro }: {pro:Product}) {
   const [isHovering, setIsHovering] = useState<boolean>(false);
@@ -22,7 +23,7 @@ function ProductCard({ pro }: {pro:Product}) {
         </a>
       </Link>
       <button className={styles.button} onClick={() => {
-        dispatch(addToCart(pro))
+        dispatch(updateCart({ operation: 'increaseQty', productId: pro.id }))
       }}>Add to Cart 🛒</button>
     </div>
   )

@@ -2,10 +2,10 @@ import React from 'react'
 import Image from 'next/image';
 import styles from '../../styles/Product.module.css'
 import { useDispatch } from 'react-redux';
-import { addToCart } from '../../redux/cart.slice';
 import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
 import { Product } from '../../interfaces'
 import { prisma, PrismaClient } from '@prisma/client';
+import { updateCart } from '../../redux/actions/cartActions';
 
 
 
@@ -25,7 +25,7 @@ function Product({product}: {product: Product}) {
       ></Image>
       <p><span className={styles.price}>{product.price}kr/stk</span>  Category: {product.category} </p>
       <button className={styles.button} onClick={() => {
-        dispatch(addToCart(product))
+        dispatch(updateCart({ operation: 'increaseQty', productId: product.id }))
       }}>Add to Cart 🛒</button>
       <p>{product.description}</p>
     </div>

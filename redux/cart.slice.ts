@@ -2,16 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Product } from '../interfaces'
 import axios from 'axios'
 import { useUser } from '@auth0/nextjs-auth0';
-
-
-export const getCart = createAsyncThunk(
-  'cart/getCart',
-  async (email: string, thunkAPI) => {
-    //1. getUserById
-    const response = await axios.get('api/getCart', { params: {email } })
-    return response.data
-  }
-)
+import { getCart, updateCart } from './actions/cartActions'
 
 interface State{
   loading: boolean

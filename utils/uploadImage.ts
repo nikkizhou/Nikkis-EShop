@@ -2,25 +2,28 @@
 import axios from 'axios'
 import aws from "aws-sdk";
 import { UserI } from '../interfaces';
+import { updateUser } from '../redux/actions/userActions';
 
-const photoUpload = async (e: React.ChangeEvent<HTMLInputElement>, user: UserI, setUser: Function) => {
+
+const photoUpload = async (e: React.ChangeEvent<HTMLInputElement>, user: UserI, dispatch: Function) => {
   e.preventDefault();
   const reader = new FileReader();
   const file = e.target.files[0];
   file && reader.readAsDataURL(file);
   const fileName = encodeURIComponent(file.name)
   await uploadToAWS(fileName, file)
-  await getURL(file.type, fileName, user, setUser)
+  await getURL(file.type, fileName, user,dispatch)
 }
 
-const getURL = async (fileType: string, fileName: string, user:UserI, setState:Function) => {
-  axios
+const getURL = async (fileType: string, fileName: string, user: UserI,dispatch:Function) => {
+  
+  await axios
     .post("/api/upload-image", {
       fileName: fileName,
       fileType: fileType,
       id: user.id
     })
-    .then(res => setState({ ...user, image: res.data.url }))
+    .then(res => dispatch(updateUser({ ...user, image: res.data.url })))
     .catch(error => console.log("Error on uploading image: " + error.message));
 }
 

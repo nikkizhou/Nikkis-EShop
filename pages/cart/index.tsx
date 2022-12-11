@@ -1,21 +1,27 @@
+import React,{useEffect} from 'react'
 import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
-import {incrementQuantity,decrementQuantity,removeFromCart,} from '../../redux/cart.slice';
 import styles from '../../styles/CartPage.module.css';
 import { Cart } from '../../interfaces'
-import { useUser } from '@auth0/nextjs-auth0';
+import { getCart, updateCart } from '../../redux/actions/cartActions';
 
 const CartPage = () => {
-  const cart: Cart = useSelector((state: { cart: Cart }) => state.cart);
-  const dispatch = useDispatch();
-  const { user, error, isLoading } = useUser();
-  console.log(user,'user in line 13 in cart');
+  const dispatch = useDispatch()
+  const cart: Cart = useSelector((state:any) => state.cart.cart);
+  console.log(cart, 'cart in line 13 in cart');
+  
+  
+  useEffect(() => {
+    // dispatch is not working without argument!!!
+    dispatch(getCart('dd'))
+  }, [])
+  //
+  
   
   const getTotalPrice:Function = () => {
-    const price:number = cart.reduce((accumulator, item) => accumulator + item.quantity * item.price, 0)
+    const price:number = cart.reduce((accumulator, pro) => accumulator + pro.quantity * pro.price, 0)
     return Math.round(price * 100) / 100        
   };
-
 
   return (
     <div className={styles.container}>
@@ -31,33 +37,39 @@ const CartPage = () => {
             <div>Actions</div>
             <div>Total Price</div>
           </div>
-          {cart.map((item) => (
+          {cart?.map((pro) => (
             <div className={styles.body}>
               <div className={styles.image}>
-                <Image src={item.image} height="80" width="65" />
+                <Image src={pro.image} height="80" width="65" />
               </div>
-              <p>{item.title}</p>
-              <p>{item.price}kr</p>
-              <p>{item.quantity}</p>
+              <p>{pro.title}</p>
+              <p>{pro.price}kr</p>
+              <p>{pro.quantity}</p>
               <div className={styles.buttons}>
-                <button onClick={() => dispatch(incrementQuantity(item.id))}>
+                <button onClick={() => dispatch(updateCart({ operation: 'increaseQty', productId: pro.id }))}>
                   +
                 </button>
-                <button onClick={() => dispatch(decrementQuantity(item.id))}>
+                <button onClick={() => dispatch(updateCart({ operation: 'decreaseQty', productId: pro.id }))}>
                   -
                 </button>
-                <button onClick={() => dispatch(removeFromCart(item.id))}>
+                <button onClick={() => dispatch(updateCart({ operation: 'removeProduct', productId: pro.id }))}>
                   x
                 </button>
               </div>
-              <p>{Math.round(item.quantity * item.price * 100) / 100}kr</p>
+              <p>{Math.round(pro.quantity * pro.price * 100) / 100}kr</p>
             </div>
           ))}
           <h2>Grand Total: {getTotalPrice()}kr</h2>
         </>
       )}
+     
     </div>
   );
 };
 
 export default CartPage;
+
+
+
+  
+ 

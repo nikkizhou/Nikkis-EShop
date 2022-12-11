@@ -1,14 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { useUser } from '@auth0/nextjs-auth0';
 import axios from 'axios'
 import {UserI} from '../interfaces'
-import { getUser,updateUser } from './actions/userAction'
+import { getUser,updateUser } from './actions/userActions'
 
-interface State {
-  isLoading: boolean
-  user: UserI|null
-  error: string | null
-}
+// interface State {
+//   isLoading: boolean
+//   user: UserI|null
+//   error: string | null
+// }
 
 const initialState = {
   isLoading: false,
