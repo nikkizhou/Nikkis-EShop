@@ -9,7 +9,7 @@ Prisma, PostgreSQL, AWS s3,  Nodemailer (for sending email)
 ## Todos:
 Database: user(shopping history, cart), business, products  
 Functions: Comments, Coupons   
-Details: loading spinner, custom alert
+Details: loading spinner, custom alert   
 CMS content management system  
 Docker  
 Deployment  
