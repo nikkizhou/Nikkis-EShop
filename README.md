@@ -6,9 +6,11 @@ React, ReduxToolKit, Auth0
 Prisma, PostgreSQL, AWS s3,  Nodemailer (for sending email)
  
 
-## Todos:
-Database: user(shopping history, cart), business, products  
-Functions: Comments, Coupons   
-CMS content management system  
-Docker  
-Deployment  
+## Todos: 
+! Functions: Reviews, Shopping history  
+! Details: loading spinner, custom alert  
+! Deployment 
+
+? CMS content management system     
+? Docker  
+ 
