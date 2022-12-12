@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client';
-import { UserI } from '../../../interfaces';
+import { UserI } from '../../interfaces';
 const prisma = new PrismaClient();
 
 

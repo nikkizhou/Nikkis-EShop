@@ -18,7 +18,7 @@ const photoUpload = async (e: React.ChangeEvent<HTMLInputElement>, user: UserI, 
 const getURL = async (fileType: string, fileName: string, user: UserI,dispatch:Function) => {
   
   await axios
-    .post("/api/upload-image", {
+    .post("/api/uploadImg", {
       fileName: fileName,
       fileType: fileType,
       id: user.id
