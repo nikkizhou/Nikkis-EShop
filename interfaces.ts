@@ -21,4 +21,5 @@ export interface UserI{
   phone?: number
   email?: string 
   role?: string
+  cart?: Cart
 }

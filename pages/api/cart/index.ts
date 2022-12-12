@@ -14,60 +14,63 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       break;
   }
 }
-
 export default handler
 
-const getCart = async (req: NextApiRequest, res: NextApiResponse) => {
-  try {
-    if (!req.query) return res.status(400).json({ message: 'Please Provide cart Email as Param' })
-    const userId = req.query.userId as string
-    //cart: [{userId:'adslkhj213', productId:1}, {userId:'vlwj234', productId:5},]
-    const cart = await prisma.cartProductsOnUsers.findMany({ where: { userId } })
-    console.log(cart,'cart in api/cart line 27');
-    res.status(200).json(cart)
 
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
+//--------------------------- HTTP Request Operations ------------------------------
+
+const getCart = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (!req.query)
+    return res.status(400).json({ message: 'Please Provide UserId as Param' })
+  const userId = req.query.userId as string
+  await fetchCartPrimsma(userId)
+    .then(cart => res.status(200).json(cart))
+    .catch(error => console.log(error.message))
 }
 
-//[key: string]: any;
 const updateCart = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (!req.body) return res.status(400).json({ message: 'Please Provide Request Body' })
+  if (!req.body)
+    return res.status(400).json({ message: 'Please Provide operation, productId, userId as Request Body' })
   const { operation, productId, userId } = req.body
 
   switch (operation) {
-    case 'increaseQty':
-      console.log(userId,'userId line 41 api/cart');
-      
-      const updatedPro = await prisma.cartProductsOnUsers.upsert({
-        where: { userId_productId: { userId, productId } },
-        update: { quantity: { increment: 1 } },
-        create: { userId, productId, quantity: 1 },
-      })
-      return updatedPro;
-  
-    case 'decreaseQty':
-
-      break;
+    case 'increaseQty': case 'decreaseQty':
+      await updateQtyPrimsma(operation, userId, productId); break;
     case 'removeProduct':
-
-      break;
+      await deleteProPrimsma(userId, productId);  break;
     default:
-      break;
-  }
+      return res.status(400).json('Operation type must be increaseQty, decreaseQty or removeProduct ');
+    }
+  
+  return res.status(200).json(await fetchCartPrimsma(userId));
+  // here the whold cart was sent back even though only one product was updated,
+  // this is because removeProduct sends back the whole cart too.
+  // in this way it's easier to unificate in cartActions and cartSlices
 }
 
 
-// const increaseQty = async (req: NextApiRequest, res: NextApiResponse) => {
-//   try {
-//     if (!req.body) return res.status(400).json({ message: 'Please Provide Request Body' })
-//     const newProfile = await prisma.cartProductsOnUsers.update({
-//       where: { id: req.body.id },
-//       data: req.body
-//     })
-//     res.status(200).json(newProfile)
-//   } catch (error) {
-//     res.status(500).json({ error: error.message })
-//   }
-// }
+//------------------------------ Prisma Operations --------------------------------
+
+const fetchCartPrimsma = async(userId:string) => {
+  const updatedCart = await prisma.cartProductsOnUsers.findMany({
+    where: { userId },
+    select: { product: true, quantity: true },
+    orderBy: { assignedAt: 'asc' },
+  });
+  return updatedCart.map(pro => { return { ...pro.product, quantity: pro.quantity } })
+}
+
+const updateQtyPrimsma = async (operation:string, userId:string, productId:number) => {
+  const qtyQuery = operation == 'increaseQty'? { increment: 1 }: { decrement: 1 }
+  await prisma.cartProductsOnUsers.upsert({
+    where: { userId_productId: { userId, productId } },
+    update: { quantity: qtyQuery },
+    create: { userId, productId, quantity: 1 },
+  })
+}
+
+const deleteProPrimsma = async (userId: string, productId: number) => {
+  await prisma.cartProductsOnUsers.delete({
+    where: { userId_productId: { userId, productId } }
+  })
+}

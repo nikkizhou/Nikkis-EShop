@@ -25,10 +25,16 @@ const getUser = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 
     const [email, name] = [req.query.email as string, req.query.name as string]
     const user = await prisma.user.upsert({
-      where: {email},
+      where: { email },
       update: {},
-      create: {  email, name },
+      create: {
+        email,
+        name,
+        cart: { create: [] }
+      },
     })
+    //console.log(user,'user api/user line 36');
+    
     res.status(200).json(user)
 
   } catch (error) {
@@ -40,6 +46,8 @@ const getUser = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 
 
 const updateUser = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+  console.log(req.body,'req.body api/user line 47');
+  
   try {
     if (!req.body) return res.status(400).json({ error: 'Please Provide Request Body' })
     const newProfile = await prisma.user.update({

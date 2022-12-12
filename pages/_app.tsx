@@ -1,23 +1,41 @@
 import React,{useEffect} from 'react'
 import '../styles/globals.css'
-import store from '../redux/store'; 
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { Provider } from 'react-redux';
 import type { AppProps } from 'next/app'
 import { UserProvider } from '@auth0/nextjs-auth0';
+import { updateUser, getUser } from '../redux/actions/userActions';
+import { getCart } from '../redux/actions/cartActions'
+import { useDispatch, useSelector } from 'react-redux';
+import { useUser, getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import store  from '../redux/store';
+import { Provider } from 'react-redux'
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }) {
+  const dispatch = useDispatch();
+  const authUser = useUser().user
+  useEffect(() => {
+    dispatch(getUser(authUser))
+    dispatch(getCart())
+  }, [authUser])
 
   return (
-    <UserProvider>
-      <Provider store={store}>
-        <Navbar />
-        <Component {...pageProps} />
-        <Footer />
-      </Provider>
-    </UserProvider>
+    <>
+      <Navbar />
+      <Component {...pageProps} />
+      <Footer />
+    </>  
   )
 }
 
-export default MyApp
+const MyAppWrapper = ({ Component, pageProps }: AppProps)=> {
+  return (
+    <Provider store={store}>
+      <UserProvider>
+        <MyApp Component={Component} pageProps={pageProps} />
+      </UserProvider>
+    </Provider>
+  )
+}
+
+export default MyAppWrapper

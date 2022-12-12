@@ -4,11 +4,12 @@ import { useSelector } from 'react-redux';
 import { Cart } from '../interfaces'
 import { useUser } from '@auth0/nextjs-auth0';
 
-
-
 const Navbar = () => {
-  const cart: Cart = useSelector((state: {cart: Cart}) => state.cart);
-  const cartDisplay: string = 'Cart🛒' + cart.length  
+  const cart: Cart = useSelector((state: any) => state.cart.cart);
+  const NrProduct = cart.reduce(
+    (accumulator, pro) => accumulator + pro.quantity, 0
+  )
+  const cartDisplay: string = 'Cart🛒' + NrProduct
   const { user, error, isLoading } = useUser();
   
   return (
