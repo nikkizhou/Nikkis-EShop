@@ -11,6 +11,8 @@ Prisma, PostgreSQL, AWS s3,  Nodemailer (for sending email)
 ! Details: loading spinner, custom alert  
 ! Deployment 
 
-? CMS content management system     
+? business side
+? CMS - contentful
 ? Docker  
+? Stripe for simulating payment
  
