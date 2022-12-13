@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import {prisma} from '../../prisma/prismaClient'
+import { prisma } from '../../prisma/prismaClient'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
@@ -8,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case 'PUT':
       await updateCart(req, res); break;
     default:
-      res.status(400).json({error:'Invalid request method!'})
+      res.status(400).json({ error: 'Invalid request method!' })
       break;
   }
 }
@@ -40,8 +40,8 @@ const updateCart = async (req: NextApiRequest, res: NextApiResponse) => {
       break;
     default:
       return res.status(400).json('Operation type must be increaseQty, decreaseQty or removeProduct ');
-    }
-  
+  }
+
   return res.status(200).json(await fetchCartPrimsma(userId));
   // here the whold cart was sent back even though only one product was updated,
   // this is because removeProduct sends back the whole cart too.
@@ -51,7 +51,7 @@ const updateCart = async (req: NextApiRequest, res: NextApiResponse) => {
 
 //------------------------------ Prisma Operations --------------------------------
 
-const fetchCartPrimsma = async(userId:string) => {
+const fetchCartPrimsma = async (userId: string) => {
   const updatedCart = await prisma.cartProductsOnUsers.findMany({
     where: { userId },
     select: { product: true, quantity: true },
@@ -60,8 +60,8 @@ const fetchCartPrimsma = async(userId:string) => {
   return updatedCart.map(pro => { return { ...pro.product, quantity: pro.quantity } })
 }
 
-const updateQtyPrimsma = async (operation:string, userId:string, productId:number) => {
-  const qtyQuery = operation == 'increaseQty'? { increment: 1 }: { decrement: 1 }
+const updateQtyPrimsma = async (operation: string, userId: string, productId: number) => {
+  const qtyQuery = operation == 'increaseQty' ? { increment: 1 } : { decrement: 1 }
   await prisma.cartProductsOnUsers.upsert({
     where: { userId_productId: { userId, productId } },
     update: { quantity: qtyQuery },

@@ -21,6 +21,9 @@ const CartPage = () => {
   const removeProduct = (pro: Product) => 
     dispatch(updateCart({ operation: 'removeProduct', productId: pro.id }))
   
+  const handleCheckOut = () => {
+    
+  }
   
   const getTotalPrice:Function = () => {
     const price:number = cart?.reduce((accumulator, pro) => accumulator + pro.quantity * pro.price, 0)
@@ -40,9 +43,10 @@ const CartPage = () => {
             <div>Quantity</div>
             <div>Actions</div>
             <div>Total Price</div>
-          </div>
+          </div >
+          <div className={styles.productContainer}>
           {cart?.map((pro,index) => (
-            <div className={styles.body} key={index}>
+            <div className={styles.product} key={index}>
               <div className={styles.image}>
                 <Image src={pro.image} height="80" width="65" />
               </div>
@@ -63,7 +67,12 @@ const CartPage = () => {
               <p>{Math.round(pro.quantity * pro.price * 100) / 100}kr</p>
             </div>
           ))}
-          <h2>Grand Total: {getTotalPrice()}kr</h2>
+          </div>
+          <h2 className={styles.totalCost}>
+            <div>Total cost (incl.VAT): </div>
+            <div>{getTotalPrice()}kr</div>
+          </h2>
+            <button onClick={handleCheckOut} className={styles.chekoutBtn}>CHECK OUT</button>
         </>
       )}
      

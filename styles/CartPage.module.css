@@ -1,4 +1,8 @@
 .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 2rem;
   text-align: center;
   width: 80vw;
@@ -10,6 +14,7 @@
   margin-top: 2rem;
   display: flex;
   justify-content: space-between;
+  width: 90%;
 }
 
 .header div {
@@ -23,7 +28,11 @@
   margin-bottom: 2rem;
 }
 
-.body {
+.productContainer{
+  width: 90%;
+}
+
+.product {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,7 +40,7 @@
   margin-bottom: 1rem;
 }
 
-.body>* {
+.product>* {
   flex: 1;
 }
 
@@ -39,12 +48,37 @@
   width: 100px;
 }
 
+.totalCost{
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+
 .buttons>* {
-  width: 25px;
-  height: 30px;
-  background-color: black;
+  width: 20px;
+  height: 20px;
+  background-color: rgb(117, 114, 114);
   color: white;
   border: none;
-  margin: 0.5rem;
+  margin: 0.1rem;
   font-size: 1rem;
+}
+
+.buttons>*:hover {
+
+  background-color: rgb(16, 16, 16);
+}
+
+.chekoutBtn {
+  width: 80%;
+  padding: 0.5rem 0;
+  background: transparent;
+  text-transform: uppercase;
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.chekoutBtn:hover {
+  background: black;
+  color: white;
 }

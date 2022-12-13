@@ -11,31 +11,30 @@ interface FormData {
 const ContactForm = () => {
   const [status, setStatus] = useState<string>("Submit");
   const [alertStatus, setAlertStatus] = useState<string>();
-
   const closeAlert:Function = () => setAlertStatus('')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("Sending...");
-    
     const { name, email, message } = e.target as typeof e.target & FormData
-    let details = {
+    const response = await sendEmail({name, email, message})
+    setStatus("Submit");
+    setAlertStatus(response.status);
+  };
+
+  const sendEmail = async ({ name, email, message }: FormData ) => {
+    const details = {
       name: name.value,
       email: email.value,
       message: message.value,
     };
-    
-    let response = await fetch("http://localhost:5000/contact", {
+    const config = {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify(details),
-    });
-    setStatus("Submit");
-    let result = await response.json();
-    setAlertStatus(result.status);
-  };
+      headers: {"Content-Type": "application/json;charset=utf-8"},
+      body: JSON.stringify(details)
+    }
+    return await fetch("api/sendEmail", config).then(res=>res.json());
+  }
   
   return (
     <div className={styles.container}>
