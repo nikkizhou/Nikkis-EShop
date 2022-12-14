@@ -1,0 +1,30 @@
+.reviewList{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap:20px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+
+.reviewList h3{
+  width: 100%;
+  text-align: left;
+  color: rgb(112, 112, 111);
+  border-bottom: 2px solid rgb(112, 112, 111);
+  margin-bottom: -5px;
+
+}
+
+.reviewCard{
+  background-color: rgba(249, 248, 246, 0.833);
+  padding: 2%;
+}
+
+.stamp{
+  display: flex;
+  justify-content: space-between;
+  color: rgb(112, 112, 111);
+  font-size: small;
+}

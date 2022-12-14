@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image';
-import styles from '../styles/ProductList.module.css'
+import styles from '../../styles/ProductPage.module.css'
 import { useDispatch } from 'react-redux';
-import { Product } from '../interfaces'
-import { updateCart } from '../redux/actions/cartActions';
+import { Product } from '../../interfaces'
+import { updateCart } from '../../redux/actions/cartActions';
 
 function ProductCard({ pro }: {pro:Product}) {
   const dispatch = useDispatch();

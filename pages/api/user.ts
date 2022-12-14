@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../prisma/prismaClient'
 
-
 const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   switch (req.method) {
     case 'GET':
@@ -9,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     case 'PUT':
       await updateUser(req, res); break;
     default:
-      res.status(400).json({error:'Invalid request method!'})
+      res.status(405).json({error:'Invalid request method!'})
       break;
   }
 }

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/HomePage.module.css'
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div className={styles.container}>
       <Head><title>Nikki's Eshop</title></Head>

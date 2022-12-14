@@ -9,10 +9,35 @@
   margin-top: -3%;
 }
 
+/* .banner{
+  display: flex;
+  width: 100%;
+  background-color: #debdb8;
+  justify-content: space-between;
+  align-items:flex-end
+} */
+
+
 .price{
   font-weight: 700;
   font-size: x-large;
   color: #f9826c
+}
+
+.product h3{
+  margin-top: 10px;
+  width: 100%;
+  text-align: left;
+  color: rgb(112, 112, 111);
+  border-bottom: 2px solid rgb(112, 112, 111);
+
+}
+
+.category{
+  align-self: flex-start;
+  margin-top: 0px;
+  margin-bottom: -5px;
+  
 }
 
 .button {
@@ -29,4 +54,38 @@
 .button:hover {
   background: black;
   color: white;
+}
+
+.reviewForm{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.reviewForm input{
+  font-size: large;
+  margin-bottom: 10px;
+  height: 80px;
+  width: 100%;
+}
+
+.reviewForm button{
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+  width: 100%;
+  background: #f39a8aa9;
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 24px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  transition: all 0.3s;
+  margin-top: -4px;
+  font-weight: 700;
+}
+
+.reviewForm button:hover {
+  background: #CC4949;
 }

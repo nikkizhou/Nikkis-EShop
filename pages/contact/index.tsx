@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from '../../styles/Contact.module.css'
+import styles from '../../styles/ContactPage.module.css'
 import CusAlert from "../../components/CusAlert";
 
 interface FormData {
@@ -8,10 +8,10 @@ interface FormData {
   message: { value: string };
 }
 
-const ContactForm = () => {
+const ContactPage = () => {
   const [status, setStatus] = useState<string>("Submit");
   const [alertStatus, setAlertStatus] = useState<string>();
-  const closeAlert:Function = () => setAlertStatus('')
+  const closeAlert: Function = () => setAlertStatus('')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,10 +35,15 @@ const ContactForm = () => {
     }
     return await fetch("api/sendEmail", config).then(res=>res.json());
   }
+
+  const message = {
+    title:'Message Sendt!',
+    description:'Thanks for contacting us. Our team will get back to you soon.'
+  }
   
   return (
-    <div className={styles.container}>
-      {alertStatus && <CusAlert status={alertStatus} closeAlert={closeAlert} />}
+    <div className={styles.container}> 
+      {alertStatus && <CusAlert status={alertStatus} closeAlert={closeAlert} message={message} />}
     <form className={styles.form} onSubmit={handleSubmit}>
       <input className={styles.input} type="text" id="name" placeholder="Name"  required />
       <input className={styles.input} type="email" id="email" placeholder="Email" required />
@@ -49,4 +54,4 @@ const ContactForm = () => {
   );
 };
 
-export default ContactForm;
+export default ContactPage;

@@ -16,8 +16,7 @@ export const getUser:any = createAsyncThunk(
 export const updateUser: any = createAsyncThunk(
   'user/updateUser',
   async (user: UserI) => {
-    const config = {headers: {'Content-Type': 'application/json'}, }
-    const newUser = await axios.put('/api/user', user, config)
+    const newUser = await axios.put('/api/user', user)
       .then(data => data.data)
       .catch(err => console.log(err.message))
     return newUser

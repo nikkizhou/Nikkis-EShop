@@ -1,28 +1,40 @@
-import React,{useEffect} from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from '../../styles/CartPage.module.css';
 import { Cart, Product, UserI } from '../../interfaces'
-import { getCart, updateCart } from '../../redux/actions/cartActions';
+import { updateCart } from '../../redux/actions/cartActions';
 import { RootState } from '../../redux/store';
+import CusAlert from '../../components/CusAlert'
+import axios from 'axios';
+
 
 const CartPage = () => {
   const dispatch = useDispatch()
   const cart: Cart = useSelector((state: RootState) => state.cart.cart);
-  //const user: UserI = useSelector((state: RootState) => state.user.user);
-  console.log(cart, 'cart in line 13 in page/cart ');
-
+  const user: UserI = useSelector((state: RootState) => state.user.user);
+  const closeAlert: Function = () => setAlertStatus('')
+  const [alertStatus, setAlertStatus] = useState<string | {error:string}>();
+  
   const decreaseQty = (pro: Product) => {
     pro.quantity === 1
-      ? removeProduct(pro)
+      ? removeProduct(pro.id)
       : dispatch(updateCart({ operation: 'decreaseQty', productId: pro.id }))
   }
 
-  const removeProduct = (pro: Product) => 
-    dispatch(updateCart({ operation: 'removeProduct', productId: pro.id }))
+  const removeProduct = (productId:number) => 
+    dispatch(updateCart({ operation: 'removeProduct', productId}))
   
-  const handleCheckOut = () => {
-    
+  const addOrders = async () => {
+    const cartDb = cart?.map(pro => ({ productId: pro.id, userId: user.id, quantity: pro.quantity }))
+    await axios.post('api/orders', cartDb)
+      .then(() => setAlertStatus('Success'))
+      .catch(err => setAlertStatus({ error: err.message }))
+  }
+
+  const handleCheckout = async () => {
+    await addOrders()
+    cart.map(pro => removeProduct(pro.id))
   }
   
   const getTotalPrice:Function = () => {
@@ -30,8 +42,14 @@ const CartPage = () => {
     return Math.round(price * 100) / 100        
   };
 
+  const message = {
+    title: 'Purchase Succeeded!',
+    description: 'You can check your shopping history in profile page'
+  }
+
   return (
     <div className={styles.container}>
+      {alertStatus && <CusAlert status={alertStatus} closeAlert={closeAlert} message={message} />}
       {cart?.length === 0 ? (
         <h1>Your Cart is Empty!</h1>
       ) : (
@@ -54,15 +72,9 @@ const CartPage = () => {
               <p>{pro.price}kr</p>
               <p>{pro.quantity}</p>
               <div className={styles.buttons}>
-                <button onClick={() => dispatch(updateCart({ operation: 'increaseQty', productId: pro.id }))}>
-                  +
-                </button>
-                <button onClick={() => decreaseQty(pro)}>
-                  -
-                </button>
-                <button onClick={() => removeProduct(pro)}>
-                  x
-                </button>
+                <button onClick={() => dispatch(updateCart({ operation: 'increaseQty', productId: pro.id }))}>+</button>
+                <button onClick={() => decreaseQty(pro)}> -</button>
+                <button onClick={() => removeProduct(pro.id)}>x</button>
               </div>
               <p>{Math.round(pro.quantity * pro.price * 100) / 100}kr</p>
             </div>
@@ -72,10 +84,10 @@ const CartPage = () => {
             <div>Total cost (incl.VAT): </div>
             <div>{getTotalPrice()}kr</div>
           </h2>
-            <button onClick={handleCheckOut} className={styles.chekoutBtn}>CHECK OUT</button>
+            <button onClick={handleCheckout} className={styles.chekoutBtn}>CHECK OUT</button>
+            
         </>
       )}
-     
     </div>
   );
 };

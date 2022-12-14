@@ -8,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case 'PUT':
       await updateCart(req, res); break;
     default:
-      res.status(400).json({error:'Invalid request method!'})
+      res.status(405).json({error:'Invalid request method!'})
       break;
   }
 }
@@ -52,17 +52,17 @@ const updateCart = async (req: NextApiRequest, res: NextApiResponse) => {
 //------------------------------ Prisma Operations --------------------------------
 
 const fetchCartPrimsma = async(userId:string) => {
-  const updatedCart = await prisma.cartProductsOnUsers.findMany({
+  const updatedCart = await prisma.cartItem.findMany({
     where: { userId },
     select: { product: true, quantity: true },
     orderBy: { assignedAt: 'asc' },
   });
-  return updatedCart.map(pro => { return { ...pro.product, quantity: pro.quantity } })
+  return updatedCart.map(pro =>( { ...pro.product, quantity: pro.quantity } ))
 }
 
 const updateQtyPrimsma = async (operation:string, userId:string, productId:number) => {
   const qtyQuery = operation == 'increaseQty'? { increment: 1 }: { decrement: 1 }
-  await prisma.cartProductsOnUsers.upsert({
+  await prisma.cartItem.upsert({
     where: { userId_productId: { userId, productId } },
     update: { quantity: qtyQuery },
     create: { userId, productId, quantity: 1 },
@@ -70,7 +70,7 @@ const updateQtyPrimsma = async (operation:string, userId:string, productId:numbe
 }
 
 const deleteProPrimsma = async (userId: string, productId: number) => {
-  await prisma.cartProductsOnUsers.delete({
+  await prisma.cartItem.delete({
     where: { userId_productId: { userId, productId } }
   })
 }

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import styles from '../../styles/ProductList.module.css'
+import styles from '../../styles/ProductPage.module.css'
 import CategoryFilter from '../../components/CategoryFilter'
-import ProductCard from '../../components/ProductCard';
+import ProductCard from '../../components/productsPage/ProductCard';
 import {Product} from '../../interfaces'
 import { GetServerSideProps } from 'next'
 import { prisma } from '../../prisma/prismaClient'
 
-function ProductList({ products }: { products: Product[] }) {
+function ProductPage({ products }: { products: Product[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>();
   const updateCategory:Function = (cate:string) => setSelectedCategory(cate);
   const productsDisplay: string | Product[] = selectedCategory && selectedCategory!='All' ? products.filter(pro=>pro.category==selectedCategory) : products
@@ -32,12 +32,15 @@ function ProductList({ products }: { products: Product[] }) {
     context.query.archived`
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  //const res = await fetch('https://fakestoreapi.com/products')
-  //const products = await res.json()
-  
+  // const products = await fetch('https://fakestoreapi.com/products').then(res => res.json())
+  // products.forEach(async (p:any) => {
+  //   const { id, title, price, description, category, image } = p
+  //   await prisma.product.create({ data: { id, title, price, description, category, image }})
+  // });
+
   const products = await prisma.product.findMany()
   if (!products) return { redirect: { destination: '/', permanent: false, } }
   return { props: { products} }
 }
 
-export default ProductList
+export default ProductPage

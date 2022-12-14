@@ -14,15 +14,15 @@ model User {
   email         String?   @unique
   phone         Int?  
   image         String?   
-  cart          CartProductsOnUsers[] @relation("cart")
-  hasBought     BoughtProductsOnUsers[] @relation("bought")
+  cart          CartItem[] @relation("cart")
+  orders        OrderItem[] @relation("order")
   reviews       Review []
   role          Role     @default(USER) 
   
   @@map("users")
 }
 
-model CartProductsOnUsers{
+model CartItem{
   product       Product @relation("cart", fields: [productId], references: [id])
   productId     Int
   quantity      Int
@@ -32,13 +32,16 @@ model CartProductsOnUsers{
   @@id([userId, productId])
 }
 
-model BoughtProductsOnUsers{
-  product       Product @relation("bought", fields: [productId], references: [id])
+model OrderItem{
+  id            String    @id @default(cuid())
+  orderNr       String
+  product       Product @relation("order", fields: [productId], references: [id])
   productId     Int
-  user          User @relation("bought",fields: [userId], references: [id])
+  quantity      Int
+  user          User @relation("order",fields: [userId], references: [id])
   userId        String
   assignedAt    DateTime @default(now())
-  @@id([userId, productId])
+  rated         Boolean @default(false)
 }
 
 enum Role {
@@ -48,15 +51,14 @@ enum Role {
 
 model Review {
   id        String  @id @default(cuid())
-  rating    Int
+  rating    Float
   text      String
   product   Product @relation(fields: [productId], references: [id])
   user      User    @relation(fields: [userId], references: [id])
   productId Int
   userId    String
+  assignedAt    DateTime @default(now())
 }
-
-
 
 model Product {
   id            Int   @id
@@ -66,8 +68,8 @@ model Product {
   image         String?  
   category      String?     
   reviews       Review[]
-  inCartOf      CartProductsOnUsers[] @relation("cart")
-  boughtBy      BoughtProductsOnUsers[] @relation("bought")
+  inCartOf      CartItem[] @relation("cart")
+  boughtBy      OrderItem[] @relation("order")
 
   @@map("products")
 }

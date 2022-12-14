@@ -1,76 +1,60 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../prisma/prismaClient'
+//import { uuid } from 'uuidv4'
+import short from 'short-uuid'
+import ShortUniqueId from 'short-unique-id'
+import { Order } from '../../interfaces'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case 'GET':
-      await getCart(req, res); break;
+      if (!req.query) return res.status(400).send({ error: 'Please Provide UserId' })
+      await getOrders(req, res); break
+    case 'POST':
+      if (!req.body) return res.status(400).send({ error: 'Please Provide Request Body' })
+      await addOrders(req, res); break
     case 'PUT':
-      await updateCart(req, res); break;
+      if (!req.body) return res.status(400).send({ error: 'Please Provide Request Body' })
+      await updateOrder(req, res); break
     default:
-      res.status(400).json({ error: 'Invalid request method!' })
-      break;
-  }
+      res.status(405).json({ error: 'Invalid request method!' }); break
+  } 
 }
 export default handler
 
 
-//--------------------------- HTTP Response Operations ---------------------------
+//--------------------------- Prisma Operations ---------------------------
 
-const getCart = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (!req.query)
-    return res.status(400).json({ message: 'Please Provide UserId as Param' })
-  const userId = req.query.userId as string
-  await fetchCartPrimsma(userId)
-    .then(cart => res.status(200).json(cart))
+const getOrders = async (req: NextApiRequest, res: NextApiResponse) => {
+  let userId = req.query.userId as string
+  
+  await prisma.orderItem.findMany({
+    where:{userId},
+    include: { product: true },
+    orderBy:{assignedAt:'desc'}
+  })
+    .then(orders => res.status(200).json(orders))
     .catch(error => console.log(error.message))
 }
 
-const updateCart = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (!req.body)
-    return res.status(400).json({ message: 'Please Provide operation, productId, userId as Request Body' })
-  const { operation, productId, userId } = req.body
 
-  switch (operation) {
-    case 'increaseQty': case 'decreaseQty':
-      await updateQtyPrimsma(operation, userId, productId);
-      break;
-    case 'removeProduct':
-      await deleteProPrimsma(userId, productId);
-      break;
-    default:
-      return res.status(400).json('Operation type must be increaseQty, decreaseQty or removeProduct ');
-  }
-
-  return res.status(200).json(await fetchCartPrimsma(userId));
-  // here the whold cart was sent back even though only one product was updated,
-  // this is because removeProduct sends back the whole cart too.
-  // in this way it's easier to unificate in cartActions and cartSlices
-}
-
-
-//------------------------------ Prisma Operations --------------------------------
-
-const fetchCartPrimsma = async (userId: string) => {
-  const updatedCart = await prisma.cartProductsOnUsers.findMany({
-    where: { userId },
-    select: { product: true, quantity: true },
-    orderBy: { assignedAt: 'asc' },
-  });
-  return updatedCart.map(pro => { return { ...pro.product, quantity: pro.quantity } })
-}
-
-const updateQtyPrimsma = async (operation: string, userId: string, productId: number) => {
-  const qtyQuery = operation == 'increaseQty' ? { increment: 1 } : { decrement: 1 }
-  await prisma.cartProductsOnUsers.upsert({
-    where: { userId_productId: { userId, productId } },
-    update: { quantity: qtyQuery },
-    create: { userId, productId, quantity: 1 },
+const addOrders = async (req: NextApiRequest, res: NextApiResponse) => { 
+  const uid = new ShortUniqueId({ length: 15 })
+  const orderNr = uid()
+  const orders = req.body.map((order: Order) => ({ ...order, orderNr }))
+  
+  await prisma.orderItem.createMany({
+    data: orders
   })
+   .then(orders => res.status(200).json(orders))
+   .catch(error => console.log(error))  
 }
 
-const deleteProPrimsma = async (userId: string, productId: number) => {
-  await prisma.cartProductsOnUsers.delete({
-    where: { userId_productId: { userId, productId } }
+const updateOrder = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log(req.body,'req body line 55');
+  
+  await prisma.orderItem.update({
+    where: { id: req.body.id },
+    data: req.body
   })
 }

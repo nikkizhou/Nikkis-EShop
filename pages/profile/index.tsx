@@ -1,25 +1,24 @@
 import Reat, { useState,useEffect } from 'react'
 import { UserI } from '../../interfaces'
 import styles from '../../styles/ProfilePage.module.css'
-import { useUser, getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
-import ImgUpload from '../../components/profile/ImgUpload'
-import Input from '../../components/profile/Input'
-import Edit from '../../components/profile/Edit'
-import Profile from '../../components/profile/Profile'
+import { useUser } from '@auth0/nextjs-auth0';
+import ImgUpload from '../../components/profilePage/ImgUpload'
+import Input from '../../components/profilePage/Input'
+import Edit from '../../components/profilePage/Edit'
+import Profile from '../../components/profilePage/Profile'
 import photoUpload from '../../utils/uploadImage'
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser, getUser } from '../../redux/actions/userActions';
 import { RootState } from '../../redux/store';
+import Orders from '../../components/profilePage/Orders';
 
-//CardProfile = ({ dbUser }: { dbUser: UserI })
-const CardProfile = () => {
+const ProfilePage = () => {
   const dispatch = useDispatch();
   const authUser = useUser().user
   const dbUser = useSelector((state: RootState) => state.user.user)
 
   const [isEditing, setIsEditing] = useState<boolean>(false) 
   const [formData, setFormData] = useState<UserI>() 
-  console.log(dbUser, 'dbUser index line 22');
  
   useEffect(() => { dispatch(getUser(authUser))}, [authUser])
   useEffect(() => { setFormData(dbUser)}, [dbUser])
@@ -40,6 +39,7 @@ const CardProfile = () => {
   
   return (
     <div className={styles.container}>
+      <div className={styles.profile_container}>
       {dbUser && isEditing ? (
         <Edit onSubmit={handleSubmit}>
           <ImgUpload onChange={(e: any) => photoUpload(e, dbUser, dispatch)} src={formData?.image} />
@@ -50,13 +50,16 @@ const CardProfile = () => {
       ) : (
         <Profile
           onSubmit={handleSubmit}
-            src={formData?.image}
-          user={dbUser} />)}
+          src={formData?.image}
+          />)}
+      </div>
+      <Orders/>
+      
     </div>
   )
 }
 
-export default CardProfile;
+export default ProfilePage;
 
 // export const getServerSideProps = withPageAuthRequired({
 //   getServerSideProps: async ({ req, res }) => {

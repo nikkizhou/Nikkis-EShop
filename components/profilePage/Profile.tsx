@@ -1,8 +1,12 @@
 import React from 'react'
 import styles from '../../styles/ProfilePage.module.css'
+import { RootState } from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { UserI } from '../../interfaces';
 
-const Profile = ({ onSubmit, src, user }) => {
-  if (user) var { name, address, email, phone } = user
+const Profile = ({ onSubmit, src }) => {
+  const user : UserI = useSelector((state: RootState) => state.user.user)
+  const { name, address, email, phone } = user || {}
 
   return (
     <div className={styles.card}>

@@ -5,9 +5,10 @@ import styles from '../styles/CusAlert.module.css'
 interface Props {
   status: any
   closeAlert: Function
+  message: {title:string, description: string}
 }
 
-function CusAlert({ status, closeAlert }: Props) {
+function CusAlert({ status, closeAlert, message }: Props) {
   const errorAlert: ReactElement =
     <Alert status='error'>
       <AlertIcon boxSize='40px' mr={0} />
@@ -35,10 +36,10 @@ function CusAlert({ status, closeAlert }: Props) {
     >
       <AlertIcon boxSize='40px' mr={0} />
       <AlertTitle mt={4} mb={1} fontSize='lg'>
-        Message Sendt!
+        {message.title}
       </AlertTitle>
-      <AlertDescription maxWidth='sm'>
-        Thanks for contacting us. Our team will get back to you soon.
+          <AlertDescription maxWidth='sm'>{message.description}
+       
       </AlertDescription>
       <button onClick={()=>closeAlert()}> X </button>
       </Alert>}

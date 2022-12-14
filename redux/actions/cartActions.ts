@@ -20,7 +20,7 @@ export const getCart: any = createAsyncThunk(
   'cart/getCart',
   async (_,thunkAPI: ThunkAPI) => {
     const userId = thunkAPI.getState().user.user.id
-    const cart = await axios.get('api/cart', { params: { userId } })
+    const cart = await axios.get('http://localhost:3000/api/cart', { params: { userId } })
       .then(data => data.data)
       .catch(err => console.log(err.message));
     return cart
@@ -32,16 +32,10 @@ export const updateCart: any = createAsyncThunk(
   async ({ operation, productId }: Props, thunkAPI: ThunkAPI) => {
     const userId = thunkAPI.getState().user.user.id
     const reqBody = { operation, productId, userId }
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    }
-
-    const newCart = await axios.put('/api/cart',reqBody , config)
+    const newCart = await axios.put('/api/cart', reqBody)
       .then(data => data.data)
       .catch(err => console.log(err.message))
-  
+    
     return newCart
   }
 )

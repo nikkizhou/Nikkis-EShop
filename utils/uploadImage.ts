@@ -35,8 +35,8 @@ const uploadToAWS = async (fileName: string, file: File) => {
   });
 
   const bucketName = process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME
-  var photoKey = "users /" + fileName;
-  var upload = new aws.S3.ManagedUpload({
+  const photoKey = "users /" + fileName;
+  const upload = new aws.S3.ManagedUpload({
     params: {
       Bucket: bucketName,
       Key: photoKey,

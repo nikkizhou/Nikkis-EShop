@@ -23,3 +23,23 @@ export interface UserI{
   role?: string
   cart?: Cart
 }
+
+export interface Order {
+  id: string
+  userId: string
+  productId: number
+  quantity: number
+  assignedAt: string
+  product: Product
+  orderNr: string
+  rated: boolean
+}
+
+export interface Review {
+  id: string
+  userId: string
+  productId: number
+  assignedAt: string
+  rating: number
+  text: string
+}

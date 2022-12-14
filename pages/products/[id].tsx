@@ -1,35 +1,79 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import Image from 'next/image';
 import styles from '../../styles/Product.module.css'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
-import { Product } from '../../interfaces'
+import { Product, Review, UserI } from '../../interfaces'
 import { prisma } from '../../prisma/prismaClient'
 import { updateCart } from '../../redux/actions/cartActions';
-
+import ReviewForm from '../../components/productsPage/ReviewForm';
+import ReviewList from '../../components/productsPage/ReviewList';
+import { useRouter } from 'next/router'
+import axios from 'axios';
+import { RootState } from '../../redux/store';
 
 
 function Product({product}: {product: Product}) {
+  const user: UserI = useSelector((state: RootState) => state.user.user);
   const dispatch = useDispatch();
-  // const router = useRouter()
-  // const {id} = router.query
-  // const product = products.find(pro => pro.id == id)
+  const router = useRouter()
+  const {id,editing,orderId} = router.query
+
+  const [editReview, setEditReview] = useState(false)
+  const [reviews, setReviews] = useState([])
+
+  useEffect(() => {editing && setEditReview(true)}, [])
+  useEffect(() => { fetchReviews() }, [])
+  
+  const fetchReviews = async () => {
+    await axios.get('http://localhost:3000/api/reviews',{params:{productId: id}})
+      .then((res) => setReviews(res.data))
+      .catch(err => console.log(err))
+  }
+  
+  const addReview = async (newReview: Review) => {
+    const newReviewComplete = {
+      ...newReview,
+      rating: Number(newReview.rating),
+      productId: Number(id),
+      userId: user.id
+    }
+    setReviews([...reviews,newReviewComplete])
+    await axios.post('http://localhost:3000/api/reviews', newReviewComplete)
+      .catch(err => {throw err})
+    await fetchReviews()
+  }
+
+  const closeReviewEditing = () => {
+    console.log('close is working');
+    setEditReview(false)
+  }
+  const addToCart = () => dispatch(updateCart({ operation: 'increaseQty', productId: product.id }))
+  
 
   return (
     <div className={styles.product}>
       <h1>{product.title}</h1>
       <Image
         src={product.image}
-        alt={product.title} width={300} height={300}
+        alt={product.title} width={200} height={200}
         className={product.image}
       ></Image>
-      <p><span className={styles.price}>{product.price}kr/stk</span>  Category: {product.category} </p>
-      <button className={styles.button} onClick={() => {
-        dispatch(updateCart({ operation: 'increaseQty', productId: product.id }))
-      }}>Add to Cart 🛒</button>
+      <p><span className={styles.price}>{product.price}kr/stk</span>  </p>
+      <button className={styles.button} onClick={addToCart}>
+        Add to Cart 🛒
+      </button>
+      <h3>Description</h3>
+      <p className={styles.category}> Category: {product.category}</p>
       <p>{product.description}</p>
+      <ReviewList reviews={reviews} />
+      {editReview
+        && <ReviewForm
+        addReview={addReview}
+        closeReviewEditing={closeReviewEditing}
+        orderId={orderId as string}
+      />}
     </div>
-
   )
 }
 
