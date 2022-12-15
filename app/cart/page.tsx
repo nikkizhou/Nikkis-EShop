@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from '../../styles/CartPage.module.css';
 import { Cart, Product, UserI } from '../../interfaces'

@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import styles from '../../styles/Product.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
