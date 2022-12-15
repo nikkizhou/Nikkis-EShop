@@ -6,13 +6,13 @@ React, ReduxToolKit, Auth0
 Prisma, PostgreSQL, AWS s3,  Nodemailer (for sending email)
  
 
-## Todos: 
-! Functions: Reviews, Shopping history  
-! Details: loading spinner, custom alert  
+## Todos:  
+! Details: loading spinner    
+! Nextjs 13    
 ! Deployment 
 
-? business side
-? CMS - contentful
+? business side   
+? CMS - contentful  
 ? Docker  
 ? Stripe for simulating payment
  
