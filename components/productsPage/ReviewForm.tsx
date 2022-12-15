@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import CusAlert from '../CusAlert';
-import ReactStars from 'react-stars'
+import ReactStars from 'react-rating-stars-component'
 import styles from '../../styles/Product.module.css'
 import axios from 'axios';
 
@@ -11,43 +10,33 @@ interface Props{
 }
 
 function ReviewForm({ addReview, closeReviewEditing, orderId }: Props) {
-  const closeAlert: Function = () => setAlertStatus('')
-  const [alertStatus, setAlertStatus] = useState<string | { error: string }>();
   const [review, setReview] = useState({ rating: 0, text: '' })
 
   const markOrderAsRated = async () => {
     return await axios.put('http://localhost:3000/api/orders', { id:orderId, rated:true })
-    .catch(err=>console.log(err))
+    .catch(err=>console.log(err.message))
   }
 
   const addReviewToDb = async () => {
     await addReview(review)
-      .then(() => setAlertStatus('Success'))
-      .catch((err: Error) => {
-        setAlertStatus({ error: err.message })
-        console.log(err.message);
-      })
+      .catch((err: Error) => console.log(err.message))
   }
 
   const submitReview = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     closeReviewEditing()
-    await markOrderAsRated()
     await addReviewToDb()
+    await markOrderAsRated()
   }
-  
-  const message = {
-    title: 'Review added',
-    description: 'Thanks for your feedback!'
-  }
+
 
   return ( 
       <form onSubmit={submitReview} className={styles.reviewForm}>
-       {alertStatus && <CusAlert status={alertStatus} closeAlert={closeAlert} message={message} />}
         <ReactStars
           count={5}
           onChange={(newRating: number) => setReview({ ...review, rating: newRating })}
           size={48}
+          isHalf={true}
           activeColor="#ffd700" />
 
         <input

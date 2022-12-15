@@ -24,7 +24,6 @@ function Orders() {
   }, [])
 
 
-  
   return (
     <div className={styles.order_container}>
       <h1>Shopping History</h1>

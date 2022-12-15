@@ -1,5 +1,5 @@
 
-import { createSlice, createAsyncThunk, } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, AsyncThunkAction } from '@reduxjs/toolkit';
 import axios from 'axios'
 
 interface ThunkAPI {
@@ -13,10 +13,9 @@ interface ThunkAPI {
 interface Props {
   operation: string,
   productId: number,
-  userId: string
 }
 
-export const getCart: any = createAsyncThunk(
+export const getCart = createAsyncThunk(
   'cart/getCart',
   async (_,thunkAPI: ThunkAPI) => {
     const userId = thunkAPI.getState().user.user.id
@@ -27,7 +26,7 @@ export const getCart: any = createAsyncThunk(
   }
 )
 //
-export const updateCart: any = createAsyncThunk(
+export const updateCart = createAsyncThunk(
   'cart/updateCart',
   async ({ operation, productId }: Props, thunkAPI: ThunkAPI) => {
     const userId = thunkAPI.getState().user.user.id

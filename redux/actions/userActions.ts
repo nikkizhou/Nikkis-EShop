@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, AsyncThunkAction } from '@reduxjs/toolki
 import axios from 'axios'
 import { UserI } from '../../interfaces';
 
-export const getUser:any = createAsyncThunk(
+export const getUser = createAsyncThunk(
   'user/getUser',
   async (user: UserI) => {
     const{email,name} = user
@@ -13,7 +13,7 @@ export const getUser:any = createAsyncThunk(
   }
 )
 
-export const updateUser: any = createAsyncThunk(
+export const updateUser = createAsyncThunk(
   'user/updateUser',
   async (user: UserI) => {
     const newUser = await axios.put('/api/user', user)

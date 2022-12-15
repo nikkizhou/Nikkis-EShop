@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../prisma/prismaClient'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case 'GET':
       await getUser(req, res); break;
@@ -19,7 +19,7 @@ export default handler
 
 //--------------------------- HTTP Response Operations ---------------------------
 
-const getUser = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.query) return res.status(400).json({ message: 'Please Provide User Email as Param' })
   const [email, name] = [req.query.email as string, req.query.name as string]
   const DbQuery = {
@@ -33,7 +33,7 @@ const getUser = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 }
 
 
-const updateUser = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+const updateUser = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!req.body) return res.status(400).json({ error: 'Please Provide Request Body' })
     const DbQuery = {
       where: { id: req.body.id },

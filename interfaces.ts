@@ -15,7 +15,7 @@ export type Cart = Product[]
 export interface UserI{
   id?: string
   file?: string | File
-  image?: string | ArrayBuffer | any
+  image?: string | ArrayBuffer
   name?:string
   address?:string
   phone?: number

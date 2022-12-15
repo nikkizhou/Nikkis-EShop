@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react'
 import Image from 'next/image';
 import styles from '../../styles/Product.module.css'
 import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
 import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
 import { Product, Review, UserI } from '../../interfaces'
 import { prisma } from '../../prisma/prismaClient'
@@ -15,7 +16,7 @@ import { RootState } from '../../redux/store';
 
 function Product({product}: {product: Product}) {
   const user: UserI = useSelector((state: RootState) => state.user.user);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter()
   const {id,editing,orderId} = router.query
 
@@ -41,14 +42,15 @@ function Product({product}: {product: Product}) {
     setReviews([...reviews,newReviewComplete])
     await axios.post('http://localhost:3000/api/reviews', newReviewComplete)
       .catch(err => {throw err})
-    await fetchReviews()
+    return await fetchReviews()
   }
 
-  const closeReviewEditing = () => {
-    console.log('close is working');
-    setEditReview(false)
-  }
-  const addToCart = () => dispatch(updateCart({ operation: 'increaseQty', productId: product.id }))
+  const closeReviewEditing = () => setEditReview(false)
+  const addToCart = () => dispatch(
+    updateCart({
+      operation: 'increaseQty',
+      productId: product.id
+    }))
   
 
   return (

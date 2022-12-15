@@ -8,12 +8,13 @@ import Edit from '../../components/profilePage/Edit'
 import Profile from '../../components/profilePage/Profile'
 import photoUpload from '../../utils/uploadImage'
 import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
 import { updateUser, getUser } from '../../redux/actions/userActions';
 import { RootState } from '../../redux/store';
 import Orders from '../../components/profilePage/Orders';
 
 const ProfilePage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const authUser = useUser().user
   const dbUser = useSelector((state: RootState) => state.user.user)
 

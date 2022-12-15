@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../prisma/prismaClient'
-//import { uuid } from 'uuidv4'
-import short from 'short-uuid'
 import ShortUniqueId from 'short-unique-id'
 import { Order } from '../../interfaces'
 
@@ -57,4 +55,6 @@ const updateOrder = async (req: NextApiRequest, res: NextApiResponse) => {
     where: { id: req.body.id },
     data: req.body
   })
+    .then(newOrder => res.status(200).json(newOrder))
+    .catch(error => console.log(error))
 }

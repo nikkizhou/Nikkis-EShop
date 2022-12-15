@@ -3,7 +3,7 @@ import nodemailer from "nodemailer"
 
 
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.body) return res.status(400).send({ error: 'Please Provide Request Body' })
   if (req.method != 'POST') return res.status(405).send({ error: 'Only POST method accepted!' })
 
