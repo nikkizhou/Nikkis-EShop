@@ -45,7 +45,7 @@ const ProfilePage = () => {
     title: 'Image uploaded!',
     description: ''
   }
-
+//
   return (
     <div className={styles.container}>
       <div className={styles.profile_container}>
