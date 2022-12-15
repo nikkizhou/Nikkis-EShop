@@ -5,13 +5,13 @@ import { UserI } from '../interfaces';
 import { updateUser } from '../redux/actions/userActions';
 
 
-const photoUpload = async (e: React.ChangeEvent<HTMLInputElement>, user: UserI, dispatch: Function) => {
+const photoUpload = async (e: React.ChangeEvent<HTMLInputElement>, user: UserI, dispatch: Function, setAlertStatus:Function) => {
   e.preventDefault();
   const reader = new FileReader();
   const file = e.target.files[0];
   file && reader.readAsDataURL(file);
   const fileName = encodeURIComponent(file.name)
-  await uploadToAWS(fileName, file)
+  await uploadToAWS(fileName, file, setAlertStatus)
   await getURL(file.type, fileName, user,dispatch)
 }
 
@@ -27,7 +27,7 @@ const getURL = async (fileType: string, fileName: string, user: UserI,dispatch:F
     .catch(error => console.log("Error on uploading image: " + error.message));
 }
 
-const uploadToAWS = async (fileName: string, file: File) => {
+const uploadToAWS = async (fileName: string, file: File, setAlertStatus: Function) => {
   aws.config.update({
     region: process.env.NEXT_PUBLIC_APP_AWS_REGION,
     accessKeyId: process.env.NEXT_PUBLIC_APP_AWS_ACCESS_KEY,
@@ -46,8 +46,8 @@ const uploadToAWS = async (fileName: string, file: File) => {
   });
 
   upload.promise()
-    .then(data => alert("Successfully uploaded photo."))
-    .catch(err => alert("There was an error uploading your photo: " + err.message))
+    .then(data => setAlertStatus("Success"))
+    .catch(err => setAlertStatus({error:err.message}))
 }
 
 export default photoUpload

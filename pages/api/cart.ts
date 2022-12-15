@@ -43,7 +43,7 @@ const updateCart = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   
   return res.status(200).json(await fetchCartPrimsma(userId));
-  // here the whold cart was sent back even though only one product was updated,
+  // here the whole cart was sent back even though only one product was updated,
   // this is because removeProduct sends back the whole cart too.
   // in this way it's easier to unificate in cartActions and cartSlices
 }

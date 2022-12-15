@@ -4,15 +4,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import styles from '../../styles/CartPage.module.css';
 import { Cart, Product, UserI } from '../../interfaces'
 import { updateCart } from '../../redux/actions/cartActions';
-import { RootState } from '../../redux/store';
+import { RootState,AppDispatch } from '../../redux/store';
 import CusAlert from '../../components/CusAlert'
 import axios from 'axios';
 
 
 const CartPage = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const cart: Cart = useSelector((state: RootState) => state.cart.cart);
   const user: UserI = useSelector((state: RootState) => state.user.user);
+  
   const closeAlert: Function = () => setAlertStatus('')
   const [alertStatus, setAlertStatus] = useState<string | {error:string}>();
   

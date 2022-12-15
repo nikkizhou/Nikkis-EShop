@@ -1,9 +1,8 @@
 .main{
   position: absolute;
   z-index: 200;
-
   margin-top: 5%;
-  background-color: rgba(209, 252, 211, 0.733);
+  background-color: rgba(167, 205, 169, 0.945);
   border-radius: 20px;
   font-size: larger;
   font-weight: 500;
@@ -13,5 +12,5 @@
   margin-top: 3%;
   border: 0ch;
   border-radius: 3px;
-  background-color: rgb(151, 235, 112);
+  background-color: rgb(34, 72, 16);
 }

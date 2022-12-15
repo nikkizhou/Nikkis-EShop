@@ -12,15 +12,19 @@ import { AppDispatch } from '../../redux/store';
 import { updateUser, getUser } from '../../redux/actions/userActions';
 import { RootState } from '../../redux/store';
 import Orders from '../../components/profilePage/Orders';
+import CusAlert from '../../components/CusAlert';
 
 const ProfilePage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const authUser = useUser().user
   const dbUser = useSelector((state: RootState) => state.user.user)
 
+  const closeAlert: Function = () => setAlertStatus('')
+  const [alertStatus, setAlertStatus] = useState<string | { error: string }>();
+
   const [isEditing, setIsEditing] = useState<boolean>(false) 
   const [formData, setFormData] = useState<UserI>() 
- 
+
   useEffect(() => { dispatch(getUser(authUser))}, [authUser])
   useEffect(() => { setFormData(dbUser)}, [dbUser])
 
@@ -37,13 +41,18 @@ const ProfilePage = () => {
     isEditing && dispatch(updateUser({...dbUser,...formData}))
   }
 
-  
+  const message = {
+    title: 'Image uploaded!',
+    description: ''
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.profile_container}>
+      {alertStatus && <CusAlert status={alertStatus} closeAlert={closeAlert} message={message} />}
       {dbUser && isEditing ? (
         <Edit onSubmit={handleSubmit}>
-          <ImgUpload onChange={(e: any) => photoUpload(e, dbUser, dispatch)} src={formData?.image} />
+          <ImgUpload onChange={(e: any) => photoUpload(e, dbUser, dispatch, setAlertStatus)} src={formData?.image} />
           <Input onChange={editInput} value={formData?.name || ''} id ='name' type='name' />
           <Input onChange={editInput} value={formData?.address || ''} id='address' type='address'  />
           <Input onChange={editInput} value={formData?.phone || ''} id='phone' type='number'/>
