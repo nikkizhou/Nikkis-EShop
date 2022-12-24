@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from '../../styles/CartPage.module.css';
-import { Cart, Product, UserI } from '../../interfaces'
+import { Cart, Product, UserI } from '../../global.d.'
 import { updateCart } from '../../redux/actions/cartActions';
 import { RootState,AppDispatch } from '../../redux/store';
 import CusAlert from '../../components/CusAlert'

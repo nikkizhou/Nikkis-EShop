@@ -2,7 +2,7 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import React, { useState } from 'react'
 import styles from '../styles/ProductPage.module.css'
-import {Product} from '../interfaces'
+import {Product} from '../global.d.'
 
 interface Props  {
   products: Product[]

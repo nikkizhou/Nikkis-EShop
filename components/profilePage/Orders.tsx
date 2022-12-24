@@ -2,10 +2,10 @@ import React, { useState,useEffect } from 'react'
 import styles from '../../styles/Orders.module.css'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux';
-import { Product, UserI } from '../../interfaces';
+import { Product, UserI } from '../../global.d.';
 import { RootState } from '../../redux/store';
 import Image from 'next/image';
-import { Order } from '../../interfaces';
+import { Order } from '../../global.d.';
 import { useRouter } from 'next/router'
 
 function Orders() {
@@ -30,11 +30,11 @@ function Orders() {
 
       {orders?.map((order, index) => {
         const { product: { image, title, price }, quantity, assignedAt, orderNr, productId,id,rated } = order
-        const time = assignedAt.replace('T', '__').substring(0, 19)
+        const time = assignedAt.replace('T', '__').substring(0, 20)
         
         return (<div className={styles.order_card} key={index}>
           <div className={styles.product}>
-            <Image src={image} width={100} height={100} />
+            <Image src={image} width={100} height={100} alt=''/>
             <div className={styles.text}>
               <div className={styles.title}>{title}</div>
               <div className={styles.price}>

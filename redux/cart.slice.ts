@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Product } from '../interfaces'
+import { Product } from '../global.d.'
 import axios from 'axios'
 import { useUser } from '@auth0/nextjs-auth0';
 import { getCart, updateCart } from './actions/cartActions'

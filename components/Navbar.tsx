@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import styles from '../styles/Navbar.module.css'
 import { useSelector } from 'react-redux';
-import { Cart } from '../interfaces'
+import { Cart } from '../global.d.'
 import { useUser } from '@auth0/nextjs-auth0';
 import { RootState } from '../redux/store';
 

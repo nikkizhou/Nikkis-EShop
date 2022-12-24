@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../prisma/prismaClient'
 import { uuid } from 'uuidv4'
-import { Order } from '../../interfaces'
+import { Order } from '../../global.d.'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {

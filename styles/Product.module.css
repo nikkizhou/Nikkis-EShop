@@ -63,7 +63,7 @@
   align-items: flex-start;
 }
 
-.reviewForm input{
+.reviewForm textarea{
   font-size: large;
   margin-bottom: 10px;
   height: 80px;

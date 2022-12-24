@@ -1,5 +1,5 @@
 import React from 'react'
-import { Review } from '../../interfaces'
+import { Review } from '../../global.d.'
 import styles from '../../styles/ReviewList.module.css'
 import ReactStars from 'react-rating-stars-component'
 
@@ -13,7 +13,7 @@ function ReviewList({ reviews }: Props) {
       <h3>Reviews</h3>
 
       {reviews?.map((review: Review, index) => {
-        const time = review.assignedAt?.replace('T', '__').substring(0, 19) 
+        const time = review.assignedAt?.replace('T', '__').substring(0, 20) 
         const user = review.userId?.substring(0, 5) + '*******'
      
         return (<div className={styles.reviewCard} key={index}>

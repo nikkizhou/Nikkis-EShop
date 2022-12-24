@@ -39,8 +39,7 @@ function ReviewForm({ addReview, closeReviewEditing, orderId }: Props) {
           isHalf={true}
           activeColor="#ffd700" />
 
-        <input
-          type='text'
+        <textarea
           name='text'
           value={review.text}
           onChange={(e) => setReview({ ...review, text: e.target.value })}
