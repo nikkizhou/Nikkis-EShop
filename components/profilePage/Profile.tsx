@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '../../styles/ProfilePage.module.css'
 import { RootState } from '../../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserI } from '../../global.d.';
+import { UserI } from '../../interfaces';
 
 const Profile = ({ onSubmit, src }) => {
   const user : UserI = useSelector((state: RootState) => state.user.user)

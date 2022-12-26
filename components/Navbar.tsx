@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import styles from '../styles/Navbar.module.css'
 import { useSelector } from 'react-redux';
-import { Cart } from '../global.d.'
+import { Cart } from '../interfaces'
 import { useUser } from '@auth0/nextjs-auth0';
 import { RootState } from '../redux/store';
 
 const Navbar = () => {
   const cart: Cart = useSelector((state: RootState) => state.cart.cart);
-  const NrProduct = cart?.reduce((accumulator, pro) => accumulator + pro.quantity, 0)|0
+  const NrProduct = cart?.reduce((accumulator, pro) => accumulator + pro?.quantity, 0)|0
     
   const cartDisplay: string = 'Cart🛒' + NrProduct
   const { user, error, isLoading } = useUser();

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, AsyncThunkAction } from '@reduxjs/toolkit';
 import axios from 'axios'
-import { UserI } from '../../global.d.';
+import { UserI } from '../../interfaces';
 
 export const getUser = createAsyncThunk(
   'user/getUser',
   async (user: UserI) => {
-    const{email,name} = user
+    const{email,name} = user || {}
     const data = user && await axios.get('/api/user', { params: { email, name } })
       .then(data => data.data)
       .catch(err => console.log(err.message));

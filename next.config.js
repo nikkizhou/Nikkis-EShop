@@ -5,6 +5,9 @@ const nextConfig = {
   images: {
     domains: ['fakestoreapi.com', 'picsum.photos'],
   },
+  output:'standalone',
 }
+
+
 
 module.exports = nextConfig

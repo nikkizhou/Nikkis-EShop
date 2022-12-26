@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image';
 import styles from '../../styles/ProductPage.module.css'
 import { useDispatch } from 'react-redux';
-import { Product } from '../../global.d.'
+import { Product } from '../../interfaces'
 import { updateCart } from '../../redux/actions/cartActions';
 import { AppDispatch } from '../../redux/store';
 
@@ -27,7 +27,7 @@ function ProductCard({ pro }: {pro:Product}) {
       <button
         className={styles.button}
         onClick={() => {
-        dispatch(updateCart({ operation: 'increaseQty', productId: pro.id }))
+        dispatch(updateCart({ operation: 'increaseQty', pro}))
       }}>Add to Cart 🛒</button>
     </div>
   )

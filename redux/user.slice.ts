@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios'
-import {UserI} from '../global.d.'
+import { UserI } from '../interfaces'
 import { getUser,updateUser } from './actions/userActions'
 
 // interface State {

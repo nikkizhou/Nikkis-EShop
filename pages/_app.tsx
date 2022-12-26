@@ -10,14 +10,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useUser, getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import store  from '../redux/store';
 import { Provider } from 'react-redux'
+import { AppDispatch } from '../redux/store';
+import { RootState } from '../redux/store';
+import { UserI } from '../interfaces'
 
 function MyApp({ Component, pageProps }) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const authUser = useUser().user
+  const dbUser:UserI = useSelector((state: RootState) => state.user.user)
+
   useEffect(() => {
     dispatch(getUser(authUser))
-    dispatch(getCart())
   }, [authUser])
+
+  useEffect(() => {
+    dbUser?.id && dispatch(getCart(dbUser?.id))
+  }, [dbUser])
+  
 
   return (
     <>

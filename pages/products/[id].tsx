@@ -23,8 +23,8 @@ function Product({product}: {product: Product}) {
   const [editReview, setEditReview] = useState(false)
   const [reviews, setReviews] = useState([])
 
-  useEffect(() => {editing && setEditReview(true)}, [])
-  useEffect(() => { fetchReviews() }, [])
+  useEffect(() => {editing && setEditReview(true)})
+  useEffect(() => { fetchReviews() })
   
   const fetchReviews = async () => {
     await axios.get('http://localhost:3000/api/reviews',{params:{productId: id}})
@@ -49,7 +49,7 @@ function Product({product}: {product: Product}) {
   const addToCart = () => dispatch(
     updateCart({
       operation: 'increaseQty',
-      productId: product.id
+      pro:product
     }))
   
 

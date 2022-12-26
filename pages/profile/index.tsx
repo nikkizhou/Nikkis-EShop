@@ -1,5 +1,5 @@
 import Reat, { useState,useEffect } from 'react'
-import { UserI } from '../../global.d.'
+import { UserI } from '../../interfaces'
 import styles from '../../styles/ProfilePage.module.css'
 import { useUser } from '@auth0/nextjs-auth0';
 import ImgUpload from '../../components/profilePage/ImgUpload'
@@ -13,11 +13,12 @@ import { updateUser, getUser } from '../../redux/actions/userActions';
 import { RootState } from '../../redux/store';
 import Orders from '../../components/profilePage/Orders';
 import CusAlert from '../../components/CusAlert';
+import ClockLoader from "react-spinners/ClockLoader";
 
 const ProfilePage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const authUser = useUser().user
-  const dbUser = useSelector((state: RootState) => state.user.user)
+  const {user,isLoading} = useSelector((state: RootState) => state.user)
 
   const closeAlert: Function = () => setAlertStatus('')
   const [alertStatus, setAlertStatus] = useState<string | { error: string }>();
@@ -26,7 +27,7 @@ const ProfilePage = () => {
   const [formData, setFormData] = useState<UserI>() 
 
   useEffect(() => { dispatch(getUser(authUser))}, [authUser])
-  useEffect(() => { setFormData(dbUser)}, [dbUser])
+  useEffect(() => { setFormData(user)}, [user])
 
   const editInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.name === 'phone'
@@ -38,7 +39,7 @@ const ProfilePage = () => {
   const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setIsEditing(prev=>!prev)
-    isEditing && dispatch(updateUser({...dbUser,...formData}))
+    isEditing && dispatch(updateUser({...user,...formData}))
   }
 
   const message = {
@@ -46,13 +47,14 @@ const ProfilePage = () => {
     description: ''
   }
 
+  if (isLoading) return <ClockLoader color={'#4A90E2'} loading={isLoading} size={100} cssOverride={{ margin: "20% auto" }} />
   return (
     <div className={styles.container}>
       <div className={styles.profile_container}>
       {alertStatus && <CusAlert status={alertStatus} closeAlert={closeAlert} message={message} />}
-      {dbUser && isEditing ? (
+      {user && isEditing ? (
         <Edit onSubmit={handleSubmit}>
-          <ImgUpload onChange={(e: any) => photoUpload(e, dbUser, dispatch, setAlertStatus)} src={formData?.image} />
+          <ImgUpload onChange={(e: any) => photoUpload(e, user, dispatch, setAlertStatus)} src={formData?.image} />
           <Input onChange={editInput} value={formData?.name || ''} id ='name' type='name' />
           <Input onChange={editInput} value={formData?.address || ''} id='address' type='address'  />
           <Input onChange={editInput} value={formData?.phone || ''} id='phone' type='number'/>
@@ -78,6 +80,6 @@ export default ProfilePage;
 //     let user = await prisma.user.findUnique({ where: { email: auth0User?.user.email}})
 //     if (!user) user = await prisma.user.create({ data: { email: auth0User?.user.email } })
     
-//     return {props: {dbUser: user}};
+//     return {props: {user: user}};
 //   },
 // });

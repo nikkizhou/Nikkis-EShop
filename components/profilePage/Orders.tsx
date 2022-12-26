@@ -2,10 +2,10 @@ import React, { useState,useEffect } from 'react'
 import styles from '../../styles/Orders.module.css'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux';
-import { Product, UserI } from '../../global.d.';
+import { Product, UserI,Order } from '../../interfaces';
 import { RootState } from '../../redux/store';
 import Image from 'next/image';
-import { Order } from '../../global.d.';
+
 import { useRouter } from 'next/router'
 
 function Orders() {

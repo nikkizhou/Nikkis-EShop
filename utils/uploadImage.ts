@@ -1,7 +1,7 @@
 
 import axios from 'axios'
 import aws from "aws-sdk";
-import { UserI } from '../global.d.';
+import { UserI } from '../interfaces';
 import { updateUser } from '../redux/actions/userActions';
 
 

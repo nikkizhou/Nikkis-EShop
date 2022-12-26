@@ -9,7 +9,10 @@ import { prisma } from '../../prisma/prismaClient'
 function ProductPage({ products }: { products: Product[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>();
   const updateCategory:Function = (cate:string) => setSelectedCategory(cate);
-  const productsDisplay: string | Product[] = selectedCategory && selectedCategory!='All' ? products.filter(pro=>pro.category==selectedCategory) : products
+  const productsDisplay: string | Product[] =
+    selectedCategory && selectedCategory != 'All'
+      ? products.filter(pro => pro.category == selectedCategory)
+      : products
 
   return (
     <div>

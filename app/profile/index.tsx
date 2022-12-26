@@ -1,5 +1,5 @@
 import Reat, { useState,useEffect } from 'react'
-import { UserI } from '../../global.d.'
+import { UserI } from '../../interfaces'
 import styles from '../../styles/ProfilePage.module.css'
 import { useUser } from '@auth0/nextjs-auth0';
 import ImgUpload from '../../components/profilePage/ImgUpload'
@@ -10,14 +10,16 @@ import photoUpload from '../../utils/uploadImage'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
 import { updateUser, getUser } from '../../redux/actions/userActions';
+import { getCart } from '../../redux/actions/cartActions';
 import { RootState } from '../../redux/store';
 import Orders from '../../components/profilePage/Orders';
 import CusAlert from '../../components/CusAlert';
 
+
 const ProfilePage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const authUser = useUser().user
-  const dbUser = useSelector((state: RootState) => state.user.user)
+  const dbUser:UserI = useSelector((state: RootState) => state.user.user)
 
   const closeAlert: Function = () => setAlertStatus('')
   const [alertStatus, setAlertStatus] = useState<string | { error: string }>();
@@ -25,9 +27,14 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false) 
   const [formData, setFormData] = useState<UserI>() 
 
-  useEffect(() => { dispatch(getUser(authUser))}, [authUser])
-  useEffect(() => { setFormData(dbUser)}, [dbUser])
-
+  // useEffect(() => {
+  //   dispatch(getUser(authUser)) 
+  // }, [authUser])
+  useEffect(() => {
+    setFormData(dbUser)
+    //dbUser && dispatch(getCart(dbUser.id))
+  }, [dbUser])
+  
   const editInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.name === 'phone'
       ? Number(e.target.value)

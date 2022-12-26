@@ -1,5 +1,5 @@
 import React from 'react'
-import { Review } from '../../global.d.'
+import { Review } from '../../interfaces'
 import styles from '../../styles/ReviewList.module.css'
 import ReactStars from 'react-rating-stars-component'
 
