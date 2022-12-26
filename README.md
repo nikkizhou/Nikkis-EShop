@@ -1,17 +1,15 @@
 ## Tech stack:
-**General**: Typescript,Nextjs  
+**General**: Typescript,Nextjs, Docker
 **Frontend**:   
 React, ReduxToolKit, Auth0  
 **Backend**:   
 Prisma, PostgreSQL, AWS s3,  Nodemailer (for sending email)
  
 
-## Todos:  
-! Docker   
-! Details: loading spinner      
+## Todos:     
 ! Deployment 
 
-? business side   
+? Business side   
 ? CMS - contentful  
 ? Stripe for simulating payment  
 ? Nextjs 13  
