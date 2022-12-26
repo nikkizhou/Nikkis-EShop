@@ -7,12 +7,12 @@ Prisma, PostgreSQL, AWS s3,  Nodemailer (for sending email)
  
 
 ## Todos:  
-! Details: loading spinner    
-! Nextjs 13    
+! Docker   
+! Details: loading spinner      
 ! Deployment 
 
 ? business side   
 ? CMS - contentful  
-? Docker  
-? Stripe for simulating payment
+? Stripe for simulating payment  
+? Nextjs 13  
  
