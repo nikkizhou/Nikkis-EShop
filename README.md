@@ -1,9 +1,9 @@
 ## Tech stack:
-**General**: Typescript,Nextjs, Docker
+**General**: Typescript,Nextjs, Docker  
 **Frontend**:   
 React, ReduxToolKit, Auth0  
 **Backend**:   
-Prisma, PostgreSQL, AWS s3,  Nodemailer (for sending email)
+Prisma, PostgreSQL, AWS s3,  Nodemailer
  
 
 ## Todos:     
