@@ -3,7 +3,7 @@ import '../styles/globals.css'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import type { AppProps } from 'next/app'
-import { UserProvider } from '@auth0/nextjs-auth0';
+import { UserProvider} from '@auth0/nextjs-auth0';
 import { updateUser, getUser } from '../redux/actions/userActions';
 import { getCart } from '../redux/actions/cartActions'
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,10 +24,9 @@ function MyApp({ Component, pageProps }) {
   }, [authUser])
 
   useEffect(() => {
-    dbUser?.id && dispatch(getCart(dbUser?.id))
+    dbUser?.id ? dispatch(getCart(dbUser?.id)) : dispatch(getCart(null))
   }, [dbUser])
   
-
   return (
     <>
       <Navbar />

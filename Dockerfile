@@ -2,6 +2,7 @@ FROM node:18-alpine AS dependencies
 
 WORKDIR /app
 COPY package*.json ./
+COPY prisma ./prisma/
 RUN npm install
 
 FROM node:18-alpine AS build
@@ -28,5 +29,4 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-CMD ["node", "server.js"]
-
+CMD ["npm", "run", "start" ]

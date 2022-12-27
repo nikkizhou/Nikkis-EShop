@@ -7,9 +7,10 @@ import { updateCart } from '../../redux/actions/cartActions';
 import { RootState,AppDispatch } from '../../redux/store';
 import CusAlert from '../../components/CusAlert'
 import axios from 'axios';
-import ClockLoader from "react-spinners/ClockLoader";
+import { useRouter } from 'next/router'
 
 const CartPage = () => {
+  const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
   const {cart, loading} = useSelector((state: RootState) => state.cart);
   const user: UserI = useSelector((state: RootState) => state.user.user);
@@ -25,6 +26,9 @@ const CartPage = () => {
   }
 
   const handleCheckout = async () => {
+    if (!user) return router.push('/api/auth/login')
+    console.log('test');
+    
     await addOrders()
     cart.map((pro: Product) => dispatch(updateCart({ operation: 'removeProduct', pro })))
   }
@@ -39,7 +43,7 @@ const CartPage = () => {
     description: 'You can check your shopping history in profile page'
   }
 
-  if (loading) return <ClockLoader color={'#4A90E2'} loading={loading} size={100} cssOverride={{ margin: "20% auto" }} />
+  
   return (
     <div className={styles.container}>
       {alertStatus && <CusAlert status={alertStatus} closeAlert={closeAlert} message={message} />}
