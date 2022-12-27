@@ -11,7 +11,6 @@ WORKDIR /app
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 
-RUN npx prisma generate
 RUN npm run build
 
 FROM node:18-alpine AS deploy
@@ -29,4 +28,4 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-CMD ["npm", "run", "start" ]
+CMD ["node", "server.js" ]
