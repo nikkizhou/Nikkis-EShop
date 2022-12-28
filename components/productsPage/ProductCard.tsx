@@ -15,14 +15,14 @@ function ProductCard({ pro }: {pro:Product}) {
   return (
     <div className={styles.productCard}>
       <Link href={`/products/${pro.id}`} key={pro.id} >
-        <div className={styles.product}
+        <a className={styles.product}
           onMouseOver={()=> handleMouseOver(true)}
           onMouseOut={() => handleMouseOver(false)}>
           {isHovering
             && <div className={styles.hoverEffect}>Show Details</div>} 
             <Image src={pro.image} alt={pro.title} width={200} height={200}></Image>
             <p className={styles.text}>{pro.title} <span> {pro.price}kr</span></p>
-        </div>
+        </a>
       </Link>
       <button
         className={styles.button}

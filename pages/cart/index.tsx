@@ -8,6 +8,7 @@ import { RootState,AppDispatch } from '../../redux/store';
 import CusAlert from '../../components/CusAlert'
 import axios from 'axios';
 import { useRouter } from 'next/router'
+import { baseUrl } from '../../config/baseURL_config';
 
 const CartPage = () => {
   const router = useRouter()
@@ -26,9 +27,8 @@ const CartPage = () => {
   }
 
   const handleCheckout = async () => {
-    if (!user) return router.push('/api/auth/login')
-    console.log('test');
-    
+    if (!user) return router.push(`${baseUrl}/api/auth/login`)
+   
     await addOrders()
     cart.map((pro: Product) => dispatch(updateCart({ operation: 'removeProduct', pro })))
   }

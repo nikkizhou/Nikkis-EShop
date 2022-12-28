@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    //"baseUrl": "https://products-blue-beta.vercel.app",
     "target": "es5",
     "lib": [
       "dom",

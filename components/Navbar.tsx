@@ -22,14 +22,14 @@ const Navbar = () => {
         <li className={styles.navlink}> <Link href="/cart">{ cartDisplay}</Link></li>
         <li className={styles.navlink}> <Link href="/contact">Contact</Link></li>
         <li className={styles.navlink}>
-          {!isLoading && !user && (
-            <div className={styles.btn}><Link href="/api/auth/login">Log in</Link></div>
+            {!isLoading && !user && (
+              <div className={styles.btn}><Link href='/api/auth/login'>Log in</Link></div>
         )}
 
           {!isLoading && user && (
               <div className={styles.proNLogout}>
-              <div className={styles.navlink}> <Link href="/profile">Profile</Link></div>
-              <div className={styles.btn}> <Link href="/api/auth/logout">Log out</Link></div>
+                <div className={styles.navlink}> <Link href={'/profile'}>Profile</Link></div>
+                <div className={styles.btn}> <Link href={'/api/auth/logout'}>Log out</Link></div>
             </div>
           )}</li>
           

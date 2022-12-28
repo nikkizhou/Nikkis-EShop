@@ -5,7 +5,18 @@ const nextConfig = {
   images: {
     domains: ['fakestoreapi.com', 'picsum.photos'],
   },
-  output:'standalone',
+  output: 'standalone',
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/api/:path*',
+  //       destination: 'https://products-blue-beta.vercel.app/api/:path*'
+  //     }
+  //   ]
+  // }
+  // "rewrites": [
+  //   { "source": "/about", "destination": "/about-our-company.html" },
+  // ]
 }
 
 

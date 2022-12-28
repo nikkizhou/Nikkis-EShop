@@ -35,14 +35,14 @@ function ProductPage({ products }: { products: Product[] }) {
     context.query.archived`
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const products = await fetch('https://fakestoreapi.com/products').then(res => res.json())
-  products.forEach(async (p:any) => {
-    const { id, title, price, description, category, image } = p
-    await prisma.product.create({ data: { id, title, price, description, category, image }})
-  });
+  // const products = await fetch('https://fakestoreapi.com/products').then(res => res.json())
+  // products.forEach(async (p:any) => {
+  //   const { id, title, price, description, category, image } = p
+  //   await prisma.product.create({ data: { id, title, price, description, category, image }})
+  // });
 
-  // const products = await prisma.product.findMany()
-  // if (!products) return { redirect: { destination: '/', permanent: false, } }
+  const products = await prisma.product.findMany()
+  if (!products) return { redirect: { destination: '/', permanent: false, } }
   return { props: { products} }
 }
 

@@ -27,7 +27,7 @@ function Product({product}: {product: Product}) {
   useEffect(() => { fetchReviews() })
   
   const fetchReviews = async () => {
-    await axios.get('http://localhost:3000/api/reviews',{params:{productId: id}})
+    await axios.get('/api/reviews',{params:{productId: id}})
       .then((res) => setReviews(res.data))
       .catch(err => console.log(err))
   }
@@ -40,7 +40,7 @@ function Product({product}: {product: Product}) {
       userId: user.id
     }
     setReviews([...reviews,newReviewComplete])
-    await axios.post('http://localhost:3000/api/reviews', newReviewComplete)
+    await axios.post('/api/reviews', newReviewComplete)
       .catch(err => {throw err})
     return await fetchReviews()
   }
