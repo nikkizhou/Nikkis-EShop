@@ -1,9 +1,12 @@
+## 👉[Live Deomo](https://products-blue-beta.vercel.app/)  
+
 ## Tech stack:
-**General**: Typescript,Nextjs, Docker  
+**General**:  
+Typescript, Nextjs, Docker, AWS RDS, AWS s3  
 **Frontend**:   
 React, ReduxToolKit, Auth0  
 **Backend**:   
-Prisma, PostgreSQL, AWS s3,  Nodemailer
+Prisma, PostgreSQL, Nodemailer
  
 
 ## Todos:     
