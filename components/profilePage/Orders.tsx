@@ -52,7 +52,7 @@ function Orders() {
                 <button
                   disabled={rated}
                   onClick={() => router.push(`/products/${productId}?orderId=${id}&editing=true`)}
-                  className={rated ? styles.disabledBtn : styles.rateBtn}>Rate</button>
+                  className={rated ? styles.disabledBtn : `${styles.rateBtn} buttonM`}>Rate</button>
                 </div>
               </a>
       

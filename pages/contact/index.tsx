@@ -48,7 +48,7 @@ const ContactPage = () => {
       <input className={styles.input} type="text" id="name" placeholder="Name"  required />
       <input className={styles.input} type="email" id="email" placeholder="Email" required />
       <textarea className={styles.comment} id="message" placeholder="Comment"  required />
-      <button className={styles.submit} type="submit">{status}</button>
+      <button className='buttonS' type="submit">{status}</button>
       </form>
     </div>
   );

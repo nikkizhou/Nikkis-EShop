@@ -65,20 +65,11 @@
 }
 
 .buttons>*:hover {
-
   background-color: rgb(16, 16, 16);
 }
 
 .chekoutBtn {
   width: 80%;
-  padding: 0.5rem 0;
-  background: transparent;
-  text-transform: uppercase;
-  border: 2px solid black;
-  cursor: pointer;
-}
-
-.chekoutBtn:hover {
-  background: black;
-  color: white;
+  margin-top: 0;
+  align-self:center
 }

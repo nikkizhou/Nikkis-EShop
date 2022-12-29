@@ -25,7 +25,7 @@ function ProductCard({ pro }: {pro:Product}) {
         </a>
       </Link>
       <button
-        className={styles.button}
+        className='buttonM'
         onClick={() => {
         dispatch(updateCart({ operation: 'increaseQty', pro}))
       }}>Add to Cart 🛒</button>

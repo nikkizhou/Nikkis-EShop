@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import ReactStars from 'react-rating-stars-component'
 import styles from '../../styles/Product.module.css'
 import axios from 'axios';
-import { baseUrl } from '../../config/baseURL_config';
 
 interface Props{
   addReview: Function,
@@ -13,15 +12,14 @@ interface Props{
 function ReviewForm({ addReview, closeReviewEditing, orderId }: Props) {
   const [review, setReview] = useState({ rating: 0, text: '' })
 
-  const markOrderAsRated = async () => {
-    return await axios.put(`${baseUrl}/api/orders`, { id:orderId, rated:true })
+  const markOrderAsRated = async () => 
+    await axios.put('/api/orders', { id:orderId, rated:true })
     .catch(err=>console.log(err.message))
-  }
 
-  const addReviewToDb = async () => {
+  const addReviewToDb = async () => 
     await addReview(review)
       .catch((err: Error) => console.log(err.message))
-  }
+  
 
   const submitReview = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,7 +28,8 @@ function ReviewForm({ addReview, closeReviewEditing, orderId }: Props) {
     await markOrderAsRated()
   }
 
-
+  console.log(review);
+  
   return ( 
       <form onSubmit={submitReview} className={styles.reviewForm}>
         <ReactStars
@@ -46,7 +45,7 @@ function ReviewForm({ addReview, closeReviewEditing, orderId }: Props) {
           onChange={(e) => setReview({ ...review, text: e.target.value })}
           placeholder='Write your reviews...' />
         
-        <button type="submit" >
+        <button type="submit" className='buttonS'>
           Submit
         </button >
       </form >

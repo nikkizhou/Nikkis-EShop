@@ -12,6 +12,7 @@ import ReviewList from '../../components/productsPage/ReviewList';
 import { useRouter } from 'next/router'
 import axios from 'axios';
 import { RootState } from '../../redux/store';
+import { baseUrl } from '../../config/baseURL_config';
 
 
 function Product({product}: {product: Product}) {
@@ -27,7 +28,7 @@ function Product({product}: {product: Product}) {
   useEffect(() => { fetchReviews() })
   
   const fetchReviews = async () => {
-    await axios.get('/api/reviews',{params:{productId: id}})
+    await axios.get(`${baseUrl}/api/reviews`,{params:{productId: id}})
       .then((res) => setReviews(res.data))
       .catch(err => console.log(err))
   }
@@ -40,7 +41,7 @@ function Product({product}: {product: Product}) {
       userId: user.id
     }
     setReviews([...reviews,newReviewComplete])
-    await axios.post('/api/reviews', newReviewComplete)
+    await axios.post(`${baseUrl}/api/reviews`, newReviewComplete)
       .catch(err => {throw err})
     return await fetchReviews()
   }
@@ -62,7 +63,7 @@ function Product({product}: {product: Product}) {
         className={product.image}
       ></Image>
       <p><span className={styles.price}>{product.price}kr/stk</span>  </p>
-      <button className={styles.button} onClick={addToCart}>
+      <button className='buttonM' onClick={addToCart}>
         Add to Cart 🛒
       </button>
       <h3>Description</h3>

@@ -51,12 +51,10 @@
 }
 
 .rateBtn {
-  width: 10%;
-  background: transparent;
-  border: 2px solid black;
-  cursor: pointer;
-  align-self: flex-end;
-  margin-top: -3rem;
+  width: 12%;
+  height: 23px;
+  padding: 0 0;
+  text-transform: none;
 }
 
 .rateBtn:hover {

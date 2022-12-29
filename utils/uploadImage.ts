@@ -3,7 +3,6 @@ import axios from 'axios'
 import aws from "aws-sdk";
 import { UserI } from '../interfaces';
 import { updateUser } from '../redux/actions/userActions';
-import { baseUrl } from '../config/baseURL_config';
 
 
 const photoUpload = async (e: React.ChangeEvent<HTMLInputElement>, user: UserI, dispatch: Function, setAlertStatus:Function) => {
@@ -19,7 +18,7 @@ const photoUpload = async (e: React.ChangeEvent<HTMLInputElement>, user: UserI, 
 const getURL = async (fileType: string, fileName: string, user: UserI,dispatch:Function) => {
   
   await axios
-    .post(`${baseUrl}/api/uploadImg`, {
+    .post('/api/uploadImg', {
       fileName: fileName,
       fileType: fileType,
       id: user.id

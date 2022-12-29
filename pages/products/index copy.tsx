@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import styles from '../../styles/ProductPage.module.css'
 import CategoryFilter from '../../components/productsPage/CategoryFilter'
 import ProductCard from '../../components/productsPage/ProductCard';
@@ -9,38 +9,34 @@ import { prisma } from '../../prisma/prismaClient'
 function ProductPage({ products }: { products: Product[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>();
   const [searchedProducts, setSearchedProducts] = useState(products)
+  const [productsDisplay, setProductsDisplay] = useState(products)
   const updateCategory: Function = (cate: string) => setSelectedCategory(cate);
   
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const value = e.target.input.value
-    const results = products.filter(pro => {
-      const regex = new RegExp(value, 'i')
-      return regex.test(pro.title)
-    })
+    const value =e.target.input.value
+    const results = products.filter(pro => pro.title.includes(value))
     setSearchedProducts(results)
-    e.target.input.value = ''
   }
 
-  let productsDisplay: string | Product[] =
-    selectedCategory && selectedCategory != 'All'
-      ? searchedProducts.filter(pro => pro.category == selectedCategory)
-      : searchedProducts
 
-  const showAllPro = () =>  setSearchedProducts(products)
+  useEffect(() => {
+    selectedCategory && selectedCategory != 'All'
+      ? setProductsDisplay(searchedProducts.filter(pro => pro.category == selectedCategory))
+      : setProductsDisplay(searchedProducts)
+  }, [selectedCategory])
   
+
+  const showAllPro = () => setProductsDisplay(products)
   return (
-    <div className={styles.products}>
-      <div className={styles.formWrapper}>
-        <form onSubmit={handleSubmit}>
-          <input placeholder='Search Product...' name='input'></input>
-          <button className='buttonS'>Search</button>
-        </form>
-        <button onClick={() => showAllPro()} className='buttonS'>Show All</button>
-      </div>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input placeholder='Search Product...' name='input'></input>
+        <button >Search</button>
+      </form>
+      <button onChange={showAllPro}>Show All</button>
       <CategoryFilter products={products} updateCategory={updateCategory} />
-      <main className={styles.container_products}>
-        {productsDisplay.length===0 && <h1>No Product Found!</h1>}
+      <main className={styles.container}>
        {productsDisplay.map((product) => (
           <ProductCard key={product.id} pro={product} />
         ))}
@@ -49,6 +45,12 @@ function ProductPage({ products }: { products: Product[] }) {
   )
 }
 
+`The context object has:
+1.Params - /pages/customer/[id].js/ =>
+    context.params.id
+2. Request and Response - context.req / context.res
+3. Querystring - index.js?archived=true =>
+    context.query.archived`
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // const products = await fetch('https://fakestoreapi.com/products').then(res => res.json())

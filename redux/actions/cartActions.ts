@@ -3,7 +3,6 @@ import { createSlice, createAsyncThunk, AsyncThunkAction } from '@reduxjs/toolki
 import axios from 'axios'
 import {Cart,Product} from '../../interfaces'
 import { getCartFromLS, setCartToLS } from '../../utils/localStorage'
-import { baseUrl } from '../../config/baseURL_config';
 
 interface ThunkAPI {
   dispatch: Function
@@ -21,7 +20,7 @@ interface Props {
 export const getCart = createAsyncThunk(
   'cart/getCart',
   async (userId:string, thunkAPI: ThunkAPI) => {
-    const cartDb = await axios.get(`${baseUrl}/api/cart`, { params: { userId } })
+    const cartDb = await axios.get('/api/cart', { params: { userId } })
       .then(data => data.data)
       .catch(err => console.log(err.message));
     

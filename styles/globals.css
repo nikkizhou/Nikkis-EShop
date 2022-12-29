@@ -4,8 +4,14 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+#__next{
   display: flex;
-  align-items: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
 }
 
 a {
@@ -15,6 +21,58 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+input {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  border-radius: 5px;
+  line-height: 22px;
+  background-color: transparent;
+  border: 2px solid #f9816ca9;
+  transition: all 0.3s;
+  padding: 13px;
+  margin-bottom: 15px;
+  width: 100%;
+  box-sizing: border-box;
+  outline: 0;
+}
+
+.buttonS {
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+  width: 100%;
+  background: #f9816ca9;
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 24px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  transition: all 0.3s;
+  margin-top: -4px;
+  font-weight: 700;
+}
+
+.buttonS:hover {
+  background: #CC4949;
+}
+
+.buttonM {
+  width: 20%;
+  padding: 0.5rem 0;
+  background: transparent;
+  text-transform: uppercase;
+  border: 2px solid black;
+  cursor: pointer;
+  align-self: flex-end;
+  margin-top: -3rem;
+}
+
+.buttonM:hover {
+  background: black;
+  color: white;
 }
 
 @media (prefers-color-scheme: dark) {
