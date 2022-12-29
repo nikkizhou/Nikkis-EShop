@@ -10,7 +10,7 @@ Prisma, PostgreSQL, Nodemailer
  
 
 ## Todos:     
-! Deployment 
+! reviews&stars, checkout for unlogin, searchbar for main page
 
 ? Business side   
 ? CMS - contentful  
