@@ -15,8 +15,9 @@ function ReviewList({ reviews }: Props) {
       {reviews?.map((review: Review, index) => {
         const time = review.assignedAt?.replace('T', '__').substring(0, 20) 
         const user = review.userId?.substring(0, 5) + '*******'
-     
-        return (<div className={styles.reviewCard} key={index}>
+        
+        return (
+          <div className={styles.reviewCard} key={index}>
           <ReactStars
             value={review.rating}
             count={5}

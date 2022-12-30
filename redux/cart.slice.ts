@@ -1,14 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Product } from '../interfaces'
-import axios from 'axios'
-import { useUser } from '@auth0/nextjs-auth0';
 import { getCart, updateCart } from './actions/cartActions'
 
-interface State{
-  loading: boolean
-  cart: Product[],
-  error: string|null
-}
 
 const cartSlice = createSlice({
   name: 'cart',

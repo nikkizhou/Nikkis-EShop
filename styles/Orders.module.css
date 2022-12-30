@@ -63,6 +63,7 @@
 }
 
 .disabledBtn {
+  height: 23px;
   pointer-events: none;
   border: 2px solid rgb(173, 171, 171);
 }

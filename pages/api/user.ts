@@ -34,12 +34,13 @@ const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
 
 
 const updateUser = async (req: NextApiRequest, res: NextApiResponse) => {
-    if (!req.body) return res.status(400).json({ error: 'Please Provide Request Body' })
-    const DbQuery = {
-      where: { id: req.body.id },
-      data: req.body
-    }
-    await prisma.user.update(DbQuery)
-      .then(user => res.status(200).json(user))
-      .catch(error => console.log(error))  
+  if (!req.body) return res.status(400).json({ error: 'Please Provide Request Body' })
+  const DbQuery = {
+    where: { id: req.body.id },
+    data: req.body
+  }
+  
+  await prisma.user.update(DbQuery)
+    .then(user => res.status(200).json(user))
+    .catch(error => console.log(error))  
 }

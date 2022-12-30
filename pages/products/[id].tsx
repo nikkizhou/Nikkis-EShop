@@ -1,19 +1,16 @@
 import React,{useState,useEffect} from 'react'
-import Image from 'next/image';
-import styles from '../../styles/Product.module.css'
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../redux/store';
-import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
-import { Product, Review, UserI } from '../../interfaces'
-import { prisma } from '../../prisma/prismaClient'
 import { updateCart } from '../../redux/actions/cartActions';
+import { RootState, AppDispatch } from '../../redux/store';
+import { GetStaticProps, GetStaticPaths } from 'next'
+import Image from 'next/image';
+import { useRouter } from 'next/router'
+import { prisma } from '../../prisma/prismaClient'
+import { Product, Review, UserI } from '../../interfaces'
+import styles from '../../styles/Product.module.css'
 import ReviewForm from '../../components/productsPage/ReviewForm';
 import ReviewList from '../../components/productsPage/ReviewList';
-import { useRouter } from 'next/router'
-import axios from 'axios';
-import { RootState } from '../../redux/store';
-import { baseUrl } from '../../config/baseURL_config';
-
+import {fetchReviews,addReview} from '../../utils/apiCalls'
 
 function Product({product}: {product: Product}) {
   const user: UserI = useSelector((state: RootState) => state.user.user);
@@ -24,44 +21,40 @@ function Product({product}: {product: Product}) {
   const [editReview, setEditReview] = useState(false)
   const [reviews, setReviews] = useState([])
 
-  useEffect(() => {editing && setEditReview(true)})
-  useEffect(() => { fetchReviews() })
+  useEffect(() => {
+    editing && setEditReview(true)
+    fetchReviews(setReviews,(id as string))
+  }, [])
   
-  const fetchReviews = async () => {
-    await axios.get(`${baseUrl}/api/reviews`,{params:{productId: id}})
-      .then((res) => setReviews(res.data))
-      .catch(err => console.log(err))
-  }
   
-  const addReview = async (newReview: Review) => {
+  const addReviewWrapper = async (newReview: Review) => {
     const newReviewComplete = {
       ...newReview,
       rating: Number(newReview.rating),
       productId: Number(id),
       userId: user.id
     }
-    setReviews([...reviews,newReviewComplete])
-    await axios.post(`${baseUrl}/api/reviews`, newReviewComplete)
-      .catch(err => {throw err})
-    return await fetchReviews()
+    setReviews([...reviews, newReviewComplete])
+    await addReview(newReviewComplete)
+    return await fetchReviews(setReviews,(id as string))
   }
 
   const closeReviewEditing = () => setEditReview(false)
   const addToCart = () => dispatch(
-    updateCart({
-      operation: 'increaseQty',
-      pro:product
+    updateCart({operation: 'increaseQty',pro:product
     }))
   
 
   return (
     <div className={styles.product}>
       <h1>{product.title}</h1>
+
       <Image
         src={product.image}
         alt={product.title} width={200} height={200}
         className={product.image}
-      ></Image>
+      />
+
       <p><span className={styles.price}>{product.price}kr/stk</span>  </p>
       <button className='buttonM' onClick={addToCart}>
         Add to Cart 🛒
@@ -69,10 +62,12 @@ function Product({product}: {product: Product}) {
       <h3>Description</h3>
       <p className={styles.category}> Category: {product.category}</p>
       <p>{product.description}</p>
+
       <ReviewList reviews={reviews} />
+
       {editReview
         && <ReviewForm
-        addReview={addReview}
+        addReview={addReviewWrapper}
         closeReviewEditing={closeReviewEditing}
         orderId={orderId as string}
       />}

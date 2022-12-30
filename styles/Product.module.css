@@ -49,8 +49,7 @@
 }
 
 .reviewForm textarea{
-  font-size: large;
   margin-bottom: 10px;
-  height: 80px;
-  width: 100%;
+  height: 120px;
+
 }

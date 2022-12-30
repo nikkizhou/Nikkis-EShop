@@ -1,8 +1,8 @@
 
 import { createSlice, createAsyncThunk, AsyncThunkAction } from '@reduxjs/toolkit';
-import axios from 'axios'
 import {Cart,Product} from '../../interfaces'
 import { getCartFromLS, setCartToLS } from '../../utils/localStorage'
+import { getCartFromDb, updateCartInDb } from '../../utils/apiCalls'
 
 interface ThunkAPI {
   dispatch: Function
@@ -20,10 +20,7 @@ interface Props {
 export const getCart = createAsyncThunk(
   'cart/getCart',
   async (userId:string, thunkAPI: ThunkAPI) => {
-    const cartDb = await axios.get('/api/cart', { params: { userId } })
-      .then(data => data.data)
-      .catch(err => console.log(err.message));
-    
+    const cartDb = await getCartFromDb(userId)
     // if logged in, get cart from db, otherwise from localstorage
     return userId ? cartDb : getCartFromLS()
   }
@@ -35,17 +32,18 @@ export const updateCart = createAsyncThunk(
     const userId = await thunkAPI.getState().user?.user?.id
     const cart = await thunkAPI.getState().cart.cart
 
-     // if logged in, update cart from db, otherwise from localstorage
+    // if logged in, update cart from db, otherwise from localstorage
     return userId
       ? await updateCartDb(operation,pro,userId)
-      : await updateCartLocalStorage(operation, cart, pro)
+      : await updateCartLocalStorage(operation, pro)
   }
 )
 
 
 //------------------------------helper functions--------------------------------
 
-const updateCartLocalStorage = (operation: string, cart: Cart, pro:Product) => {
+const updateCartLocalStorage = (operation: string, pro: Product) => {
+  const cart = getCartFromLS()
   let newCart: Cart = [...cart]
   const product = pro
   
@@ -64,7 +62,7 @@ const updateCartLocalStorage = (operation: string, cart: Cart, pro:Product) => {
     case 'decreaseQty':
       const pro = cart.find(p => p.id === product.id)
       if (pro.quantity === 1) {  
-        return updateCartLocalStorage('removeProduct', cart, pro)
+        return updateCartLocalStorage('removeProduct', pro)
       }
       newCart = cart?.map((p: Product) =>
         p.id === pro.id ? { ...p, quantity: p.quantity - 1 } : p)
@@ -72,6 +70,7 @@ const updateCartLocalStorage = (operation: string, cart: Cart, pro:Product) => {
     
     case 'removeProduct':
       newCart = cart.filter((p: Product) => p.id !== product.id); break;
+      
     default:
       break;
   }
@@ -86,7 +85,5 @@ const updateCartDb = async (operation: string, pro: Product, userId: string) => 
   if (operation == 'decreaseQty' && pro.quantity === 1)
     operation = 'removeProduct'
 
-  return await axios.put('/api/cart', { operation, productId, userId })
-    .then(data => data.data)
-    .catch(err => console.log(err.message)) 
+  return await updateCartInDb(operation, productId, userId)
 }

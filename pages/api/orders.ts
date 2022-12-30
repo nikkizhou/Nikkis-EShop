@@ -8,9 +8,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case 'GET':
       if (!req.query) return res.status(400).send({ error: 'Please Provide UserId' })
       await getOrders(req, res); break
+    
     case 'POST':
       if (!req.body) return res.status(400).send({ error: 'Please Provide Request Body' })
-      await addOrders(req, res); break
+      await addOrder(req, res); break
+      
     case 'PUT':
       if (!req.body) return res.status(400).send({ error: 'Please Provide Request Body' })
       await updateOrder(req, res); break
@@ -36,21 +38,18 @@ const getOrders = async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 
-const addOrders = async (req: NextApiRequest, res: NextApiResponse) => { 
-  const uid = new ShortUniqueId({ length: 15 })
+const addOrder = async (req: NextApiRequest, res: NextApiResponse) => { 
+  const uid = new ShortUniqueId({ length: 12 })
   const orderNr = uid()
   const orders = req.body.map((order: Order) => ({ ...order, orderNr }))
   
-  await prisma.orderItem.createMany({
-    data: orders
-  })
-   .then(orders => res.status(200).json(orders))
-   .catch(error => console.log(error))  
+  await prisma.orderItem.createMany({data: orders})
+    .then(orders => res.status(200).send(orderNr))
+    .catch(error => console.log(error))  
+  
 }
 
 const updateOrder = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log(req.body,'req body line 55');
-  
   await prisma.orderItem.update({
     where: { id: req.body.id },
     data: req.body

@@ -1,19 +1,20 @@
 import Reat, { useState,useEffect } from 'react'
+import { useUser } from '@auth0/nextjs-auth0';
+import ClockLoader from "react-spinners/ClockLoader";
+import { RootState } from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
+import { updateUser, getUser } from '../../redux/actions/userActions';
 import { UserI } from '../../interfaces'
 import styles from '../../styles/ProfilePage.module.css'
-import { useUser } from '@auth0/nextjs-auth0';
 import ImgUpload from '../../components/profilePage/ImgUpload'
 import Input from '../../components/profilePage/Input'
 import Edit from '../../components/profilePage/Edit'
 import Profile from '../../components/profilePage/Profile'
-import photoUpload from '../../utils/uploadImage'
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../redux/store';
-import { updateUser, getUser } from '../../redux/actions/userActions';
-import { RootState } from '../../redux/store';
-import Orders from '../../components/profilePage/Orders';
+import OrderList from '../../components/profilePage/OrderList';
 import CusAlert from '../../components/CusAlert';
-import ClockLoader from "react-spinners/ClockLoader";
+import photoUpload from '../../utils/uploadImage'
+import { imgUploadedMsg } from '../../utils/alertMessage'
 
 const ProfilePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -42,31 +43,25 @@ const ProfilePage = () => {
     isEditing && dispatch(updateUser({...user,...formData}))
   }
 
-  const message = {
-    title: 'Image uploaded!',
-    description: ''
-  }
 
   if (isLoading) return <ClockLoader color={'#4A90E2'} loading={isLoading} size={100} cssOverride={{ margin: "20% auto" }} />
   return (
     <div className={styles.container}>
       <div className={styles.profile_container}>
-      {alertStatus && <CusAlert status={alertStatus} closeAlert={closeAlert} message={message} />}
-      {user && isEditing ? (
+      {alertStatus && <CusAlert status={alertStatus} closeAlert={closeAlert} message={imgUploadedMsg} />}
+      {user && isEditing
+        ? 
         <Edit onSubmit={handleSubmit}>
           <ImgUpload onChange={(e: any) => photoUpload(e, user, dispatch, setAlertStatus)} src={formData?.image} />
           <Input onChange={editInput} value={formData?.name || ''} id ='name' type='name' />
           <Input onChange={editInput} value={formData?.address || ''} id='address' type='address'  />
           <Input onChange={editInput} value={formData?.phone || ''} id='phone' type='number'/>
         </Edit>
-      ) : (
-        <Profile
-          onSubmit={handleSubmit}
-          src={formData?.image}
-          />)}
+        : 
+        <Profile onSubmit={handleSubmit} src={formData?.image}
+      />}
       </div>
-      <Orders/>
-      
+      <OrderList />
     </div>
   )
 }

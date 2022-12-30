@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ReactStars from 'react-rating-stars-component'
 import styles from '../../styles/Product.module.css'
-import axios from 'axios';
+import { markOrderAsRated } from '../../utils/apiCalls'
 
 interface Props{
   addReview: Function,
@@ -12,23 +12,16 @@ interface Props{
 function ReviewForm({ addReview, closeReviewEditing, orderId }: Props) {
   const [review, setReview] = useState({ rating: 0, text: '' })
 
-  const markOrderAsRated = async () => 
-    await axios.put('/api/orders', { id:orderId, rated:true })
-    .catch(err=>console.log(err.message))
-
   const addReviewToDb = async () => 
     await addReview(review)
       .catch((err: Error) => console.log(err.message))
   
-
   const submitReview = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     closeReviewEditing()
     await addReviewToDb()
-    await markOrderAsRated()
+    await markOrderAsRated(orderId)
   }
-
-  console.log(review);
   
   return ( 
       <form onSubmit={submitReview} className={styles.reviewForm}>

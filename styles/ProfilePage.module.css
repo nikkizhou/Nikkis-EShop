@@ -1,4 +1,5 @@
 .container{
+  width: 90vw;
   display: flex;
   justify-content: space-around;
   
@@ -9,6 +10,7 @@
   font-family: 'Hind Guntur', sans-serif;
   display: flex;
   justify-content: space-around;
+  
 
 }
 

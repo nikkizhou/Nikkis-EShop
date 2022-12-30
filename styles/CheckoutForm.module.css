@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 65vw;
+  height: 50vh;
+
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 60vw;
+  height: 70%;
+  position: relative;
+  margin-bottom: 5%;
+}
+
+.closeBtn{
+  margin-left: 93%;
+  align-self: flex-start;
+  justify-self: flex-end;
+  margin-bottom: 2%;
+  background-color: #f9816ca9;
+  border: none;
+  color:white
+}
+
+.closeBtn:hover {
+  background: #CC4949;
+}
