@@ -9,7 +9,7 @@ body {
 #__next{
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: self-start;
   justify-content: center;
   width: 100vw;
 

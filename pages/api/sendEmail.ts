@@ -4,7 +4,9 @@ import nodemailer from "nodemailer"
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.body) return res.status(400).send({ error: 'Please Provide Request Body' })
   if (req.method != 'POST') return res.status(405).send({ error: 'Only POST method accepted!' })
-  const { name, email, message,orderNr, phone, address, products } = req.body;
+  const { name, email, message, orderNr, phone, address, products } = req.body;
+  console.log(email);
+  
  
   const htmlForOrders = 
     `<h1>Thanks for your order at Nikki's Eshop!<h1> 
@@ -29,7 +31,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const mail: Object = 
     {
       from: name,
-      to: process.env.CONTACT_EMAIL_ADDRESS,
+      to: email,
       subject: orderNr ? "Order confirmation" : "Contact Form Submission",
       html: orderNr ? htmlForOrders : htmlForContactForm,
     }

@@ -72,3 +72,19 @@
   margin-top: 0;
   align-self:center
 }
+
+
+@media (max-width: 768px) {
+  .container {
+    width: 100vw;
+    padding: 0;
+  }
+  .header div{
+    font-size:small;
+    margin-top: 0;
+  }
+  .product p{
+    max-height: 70px;
+    overflow: scroll;
+  }
+}

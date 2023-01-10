@@ -30,3 +30,12 @@
 .closeBtn:hover {
   background: #CC4949;
 }
+
+
+@media (max-width: 768px) {
+  .container {
+    width: 85vw;
+
+  }
+
+}

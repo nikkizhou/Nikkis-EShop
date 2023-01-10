@@ -65,7 +65,16 @@
 
 
 @media (max-width: 768px) {
-  .navbar {
-    
+  .navbar ul{
+    margin-block-start: 0
+  }
+  .navbar{
+    width: 100%;
+    overflow: scroll;
+    height: 10vh;
+  }
+
+  .navbar h6 {
+    display: none;
   }
 }

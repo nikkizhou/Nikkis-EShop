@@ -105,15 +105,12 @@
 
 
 @media (max-width: 768px) {
-  .products {
-    margin-left: 60%;
-  }
+
   .container_products {
     display: flex;
     flex-direction: column;
     align-content: center;
     width: 100vw;
-    margin-top: -2rem;
   }
   .formWrapper button {
     width: 100px;
