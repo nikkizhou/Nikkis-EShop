@@ -5,8 +5,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.body) return res.status(400).send({ error: 'Please Provide Request Body' })
   if (req.method != 'POST') return res.status(405).send({ error: 'Only POST method accepted!' })
   const { name, email, message, orderNr, phone, address, products } = req.body;
-  console.log(email);
-  
  
   const htmlForOrders = 
     `<h1>Thanks for your order at Nikki's Eshop!<h1> 

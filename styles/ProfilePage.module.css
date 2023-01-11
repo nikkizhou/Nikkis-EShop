@@ -2,8 +2,6 @@
   width: 90vw;
   display: flex;
   justify-content: space-around;
-  
-  
 }
 
 .profile_container {
@@ -187,4 +185,16 @@
 
 .profile_container button:focus {
   outline: none;
+}
+
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .card{
+    width: 80vw;
+  }
+
 }

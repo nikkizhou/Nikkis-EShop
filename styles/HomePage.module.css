@@ -104,12 +104,25 @@
 }
 
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .grid {
     width: 100%;
     flex-direction: column;
   }
+
+  .title{
+    margin-top: 40%;
+    font-size: 2.5rem;
+  }
+
+  .main a {
+    font-size: 1.5rem;
+    margin-left: 0;
+  }
+
+
 }
+
 
 @media (prefers-color-scheme: dark) {
   .card,
