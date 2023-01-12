@@ -1,4 +1,5 @@
 ## 👉[Live Deomo](https://products-blue-beta.vercel.app/)  
+## 👉[Video Deomo](https://www.youtube.com/watch?v=tce1VfjM6WU)  
 
 ## Motivation
 The motivation for this classical ecommerce app is to build a bigger project where I get to practice what I've learnt and in the same time add new techs (docker, AWS, prisma...) I've been interested in. 
